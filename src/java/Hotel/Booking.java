@@ -19,7 +19,7 @@ public class Booking {
         System.out.println("4) Exit");
         System.out.print("Enter here: ");
         input =  in.nextLine();
-        while ( input != "4")
+        while (!input.equals("4"))
         {
 
             switch (input)
