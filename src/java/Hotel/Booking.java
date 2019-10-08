@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Booking {
     private static Scanner in = new Scanner(System.in);
-    private static String input;
+    private static String m_input;
 
     public Booking()
     {
