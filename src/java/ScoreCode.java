@@ -13,24 +13,20 @@ public class ScoreCode {
                 case "1":
                     //list all rooms
                     rooms.listOfAllRooms();
-                    Input = newBooking.menu();
                     break;
                 case "2":
                     //Book a room
-
-                    Input = newBooking.menu();
+                    newBooking.bookARoom();
                     break;
                 case "3":
                     //List all booked rooms
-
-                    Input = newBooking.menu();
+                    newBooking.listOfAllBookedRooms();
                     break;
                 default:
                     //wrong number
-
-                    Input = newBooking.menu();
-                    break;
+                    System.exit(0);
             }
+            Input = newBooking.menu();
         }
     }
 }
