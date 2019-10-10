@@ -23,10 +23,6 @@ public class Booking {
         return m_input;
     }
 
-    public void listOfAllBookedRooms(){
-
-    }
-
     public void bookARoom(){
         System.out.print("Entre your name: ");
         m_input = in.next();
@@ -37,6 +33,11 @@ public class Booking {
         rooms.setRoomNumber(m_input);
 
         rooms.getARoomIfPossible();
+    }
+
+    public void viewAllBookedRooms()// maybe needlessly
+    {
+        rooms.listOfAllBookedRooms();
     }
 
 }

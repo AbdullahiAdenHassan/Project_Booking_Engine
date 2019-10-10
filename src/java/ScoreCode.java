@@ -20,7 +20,7 @@ public class ScoreCode {
                     break;
                 case "3":
                     //List all booked rooms
-                    newBooking.listOfAllBookedRooms();
+                    newBooking.viewAllBookedRooms();
                     break;
                 default:
                     //wrong number

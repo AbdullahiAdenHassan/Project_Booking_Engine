@@ -1,59 +1,65 @@
 package Hotel;
 
-import javax.management.ObjectName;
-import java.lang.invoke.VarHandle;
 import java.util.*;
 
 public class Rooms {
     private Guest m_guest;
-    private String m_room;
+    private String m_room = null;
 
-    private List <String> m_roomslist = Arrays.asList("101", "102","103","104","105");
+    private List<String> m_roomslist = Arrays.asList("101", "102", "103", "104", "105");
+    private int hotelSize = m_roomslist.size();
+
     private ListIterator<String> m_rooms = m_roomslist.listIterator();
-    private HashMap<String,ListIterator> reservation = new HashMap();
+    private HashMap<String, String> reservation = new HashMap();
+    private String m_reservation[][] = new String[hotelSize][2];
 
-    public Rooms()
-    {
+    public Rooms() {
 
     }
 
-    public Rooms(Guest guest)
-    {
+    public Rooms(Guest guest) {
         this.m_guest = guest;
     }
 
     public void listOfAllRooms() {
-        while (m_rooms.hasNext()){
-            System.out.println("Room "+m_rooms.next());
+        while (m_rooms.hasNext()) {
+            setRoomNumber(m_rooms.next());
+            System.out.println("Room " + getRoomNumber());
         }
     }
 
-    public void getARoomIfPossible() // does not work correct!
+    public void getARoomIfPossible()
     {
-        if(isARoomFree(getRoomNumber()) == true) {
-            reservation.put(m_guest.getName(), m_roomslist.listIterator());
-            System.out.println(getRoomNumber()+" "+m_guest.getName());
-        }
+        if (isThatRoomFree(getRoomNumber()) == true)
+            System.out.println("Your room is booked!");
         else
             System.out.println("That room is not free!");
+    }
+    public void listOfAllBookedRooms(){
 
     }
-    private boolean isARoomFree(String room) //incorrect logic.
+
+    private boolean isThatRoomFree(String roomNumber)
     {
-        while (m_rooms.hasNext()){
-           if(m_rooms.next().equals(room) & !reservation.containsKey(m_guest.getName()))
-               return true;
+        if (reservation.isEmpty()) {
+            while (m_rooms.hasNext()) {
+                String roomsKey = m_rooms.next();
+                reservation.put(roomsKey, "");
+            }
+        }
+
+        if (reservation.containsKey(roomNumber) & reservation.get(roomNumber).isEmpty() ) {
+            reservation.replace(roomNumber,"",m_guest.getName());
+            return true;
         }
         return false;
     }
 
-
-    //maybe later useful.
-    public void setRoomNumber(String room){
+    public void setRoomNumber(String room) {
         this.m_room = room;
     }
-    private String getRoomNumber(){
+
+    private String getRoomNumber() {
         return m_room;
     }
-
 }
