@@ -1,5 +1,6 @@
 package Hotel;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Booking {
@@ -8,12 +9,11 @@ public class Booking {
     private Guest guest = new Guest();
     private Rooms rooms = new Rooms(guest);
 
-    public Booking()
-    {
+    public Booking() {
 
     }
 
-    public String menu(){
+    public String menu() {
         System.out.println("1) List all rooms");
         System.out.println("2) Book a room");
         System.out.println("3) List all booked rooms");
@@ -23,14 +23,14 @@ public class Booking {
         return m_input;
     }
 
-    public void bookARoom(){
-        System.out.print("Entre your name: ");
-        m_input = in.next();
-        guest.setName(m_input);
-
+    public void bookARoom() {
         System.out.print("Entre a room number: ");
         m_input = in.next();
         rooms.setRoomNumber(m_input);
+
+        System.out.print("Entre your name: ");
+        m_input = in.next();
+        guest.setName(m_input);
 
         rooms.getARoomIfPossible();
     }
@@ -38,6 +38,20 @@ public class Booking {
     public void viewAllBookedRooms()// maybe needlessly
     {
         rooms.listOfAllBookedRooms();
+    }
+
+    public void clearConsole(){
+        try {
+            Thread.sleep(3000);
+            Runtime.getRuntime().exec("CLR");
+        }catch (IOException | InterruptedException e){}
+
+        int newLine = 0;
+        while(newLine !=30)
+        {
+            System.out.println();
+            newLine++;
+        }
     }
 
 }

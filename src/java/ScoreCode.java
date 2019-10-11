@@ -13,14 +13,17 @@ public class ScoreCode {
                 case "1":
                     //list all rooms
                     rooms.listOfAllRooms();
+                    newBooking.clearConsole();
                     break;
                 case "2":
                     //Book a room
                     newBooking.bookARoom();
+                    newBooking.clearConsole();
                     break;
                 case "3":
                     //List all booked rooms
                     newBooking.viewAllBookedRooms();
+                    newBooking.clearConsole();
                     break;
                 default:
                     //wrong number

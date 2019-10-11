@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class Guest {
-    private StringBuilder m_names; // maybe later!!!
     private String m_name;
 
     public Guest(){
@@ -13,7 +12,6 @@ public class Guest {
     }
 
     public void setName(String name){
-
         this.m_name = name;
     }
 
