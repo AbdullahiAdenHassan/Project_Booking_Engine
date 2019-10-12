@@ -7,8 +7,7 @@ public class ScoreCode {
         Rooms rooms = new Rooms();
         Booking newBooking = new Booking();
         String Input = newBooking.menu();
-        while(!Input.equals("4"))
-        {
+        while (!Input.equals("4")) {
             switch (Input) {
                 case "1":
                     //list all rooms
@@ -22,7 +21,7 @@ public class ScoreCode {
                     break;
                 case "3":
                     //List all booked rooms
-                    newBooking.viewAllBookedRooms();
+                    rooms.listOfAllBookedRooms();
                     newBooking.clearConsole();
                     break;
                 default:

@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Booking {
-    private static Scanner in = new Scanner(System.in);
-    private static String m_input;
+    private Scanner in = new Scanner(System.in);
     private Guest guest = new Guest();
     private Rooms rooms = new Rooms(guest);
+    private String m_input;
 
     public Booking() {
 
@@ -35,20 +35,18 @@ public class Booking {
         rooms.getARoomIfPossible();
     }
 
-    public void viewAllBookedRooms()// maybe needlessly
-    {
-        rooms.listOfAllBookedRooms();
-    }
+    public void clearConsole() {
 
-    public void clearConsole(){
+        //Don't work
         try {
             Thread.sleep(3000);
             Runtime.getRuntime().exec("CLR");
-        }catch (IOException | InterruptedException e){}
+        } catch (IOException | InterruptedException e) {
+        }
 
+        // dirty solution.
         int newLine = 0;
-        while(newLine !=30)
-        {
+        while (newLine != 15) {
             System.out.println();
             newLine++;
         }
