@@ -7,10 +7,8 @@ public class Rooms {
     private String m_room = null;
     private int m_id = 1;
     private List<String> m_roomslist = Arrays.asList("101", "102", "103", "104", "105");
-
     private ListIterator<String> m_rooms = m_roomslist.listIterator();
     private HashMap<String, String> reservation = new HashMap();
-    private String roomsKey;
 
     public Rooms() {
         while (m_rooms.hasNext()) {
@@ -26,6 +24,15 @@ public class Rooms {
 
     public void listOfAllRooms() {
         List<String> allRooms = new ArrayList<>(reservation.keySet());
+        Iterator hotelRooms = reservation.entrySet().iterator();
+        System.out.println("Rooms:");
+        while (hotelRooms.hasNext()){
+            Map.Entry roomsNumber = (Map.Entry) hotelRooms.next();
+            if(!roomsNumber.getValue().toString().isEmpty()){
+
+            }
+        }
+        System.out.println("Rooms:");
         allRooms.forEach(System.out::println);
     }
 
