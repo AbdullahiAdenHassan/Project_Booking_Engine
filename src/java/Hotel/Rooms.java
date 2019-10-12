@@ -53,14 +53,14 @@ public class Rooms {
     }
 
     private boolean isThatRoomFree(String roomNumber) {
-        if (isRoomFree(roomNumber)) {
+        if (Room(roomNumber)) {
             m_reservation.replace(roomNumber, "", m_guest.getName());
             return true;
         }
         return false;
     }
 
-    private boolean isRoomFree(String roomNumber) {
+    private boolean Room(String roomNumber) {
         if (m_reservation.containsKey(roomNumber) & m_reservation.get(roomNumber).isEmpty())
             return true;
         return false;
