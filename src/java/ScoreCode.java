@@ -2,6 +2,7 @@ import Hotel.Booking;
 import Hotel.Rooms;
 
 public class ScoreCode {
+    //XML file: ROOM NAME ID DATUM
 
     public static void main(String[] args) {
         Rooms rooms = new Rooms();
@@ -28,7 +29,6 @@ public class ScoreCode {
                     //wrong number
                     System.out.println("Wrong input, try again!");
                     newBooking.clearConsole();
-                    newBooking.menu();
             }
             Input = newBooking.menu();
         }
