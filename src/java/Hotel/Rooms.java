@@ -24,7 +24,7 @@ public class Rooms {
 
     public void listOfAllRooms() {
         System.out.println("List of all rooms: ");
-        m_roomslist.forEach((k)->System.out.println("\t"+k));
+        m_roomslist.forEach((k) -> System.out.println("\t" + k));
     }
 
     public void getARoomIfPossible() {
@@ -36,14 +36,13 @@ public class Rooms {
 
     public void listOfAllBookedRooms() {
         System.out.println("\nList of all booked rooms: ");
-        m_bookedRooms = m_reservation.
-                entrySet()
+        m_bookedRooms = m_reservation
+                .entrySet()
                 .stream()
-                .filter(m_reservation->!m_reservation.getValue()
-                        .isEmpty())
-        .map(Map.Entry::getKey)
-        .collect(Collectors.toList());
-        m_bookedRooms.forEach(x-> System.out.println("Room\t"+x));
+                .filter(m_reservation -> !m_reservation.getValue().isEmpty())
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+        m_bookedRooms.forEach(x -> System.out.println("Room " + x));
     }
 
     private boolean isThatRoomFree(String roomNumber) {
