@@ -1,22 +1,20 @@
 package Hotel;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Rooms {
     private static HashMap<String, String> m_reservation = new HashMap();
     private Guest m_guest;
     private List<String> m_roomslist = Arrays.asList("101", "102", "103", "104", "105");
-    private ListIterator<String> m_rooms = m_roomslist.listIterator();
-    private Iterator m_hotelRooms;
-    private Iterator m_bookedRooms;
+    private List m_bookedRooms;
     private String m_room;
     private int m_id;
 
     public Rooms() {
-        while (m_rooms.hasNext()) {
-            m_room = m_rooms.next();
-            m_reservation.put(m_room, "");
-        }
+        for (String rooms : m_roomslist)
+            m_reservation.put(rooms, "");
     }
 
     public Rooms(Guest guest) {
@@ -25,12 +23,8 @@ public class Rooms {
     }
 
     public void listOfAllRooms() {
-        m_hotelRooms = m_reservation.entrySet().iterator();
-        System.out.println("Rooms:");
-        while (m_hotelRooms.hasNext()) {
-            Map.Entry roomsNumber = (Map.Entry) m_hotelRooms.next();
-            System.out.println("\t" + roomsNumber.getKey().toString());
-        }
+        System.out.println("List of all rooms: ");
+        m_roomslist.forEach((k)->System.out.println("\t"+k));
     }
 
     public void getARoomIfPossible() {
@@ -41,15 +35,15 @@ public class Rooms {
     }
 
     public void listOfAllBookedRooms() {
-        System.out.println("ID " + " Room" + "  Name");
-        m_bookedRooms = m_reservation.entrySet().iterator();
-        m_id = 1;
-        while (m_bookedRooms.hasNext()) {
-            Map.Entry paris = (Map.Entry) m_bookedRooms.next();
-            if (paris.getValue().toString().matches("[a-zA-Z0-9]+")) {
-                System.out.println(m_id++ + "   " + paris.getKey() + "   " + paris.getValue());
-            }
-        }
+        System.out.println("\nList of all booked rooms: ");
+        m_bookedRooms = m_reservation.
+                entrySet()
+                .stream()
+                .filter(m_reservation->!m_reservation.getValue()
+                        .isEmpty())
+        .map(Map.Entry::getKey)
+        .collect(Collectors.toList());
+        m_bookedRooms.forEach(x-> System.out.println("Room\t"+x));
     }
 
     private boolean isThatRoomFree(String roomNumber) {

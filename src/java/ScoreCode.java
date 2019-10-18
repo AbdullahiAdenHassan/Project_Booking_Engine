@@ -26,7 +26,9 @@ public class ScoreCode {
                     break;
                 default:
                     //wrong number
-                    System.exit(0);
+                    System.out.println("Wrong input, try again!");
+                    newBooking.clearConsole();
+                    newBooking.menu();
             }
             Input = newBooking.menu();
         }
