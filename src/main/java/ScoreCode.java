@@ -1,10 +1,16 @@
 import Hotel.Booking;
+import Hotel.JAXBToXML;
 import Hotel.Rooms;
+import Hotel.XMLFiles;
 
 public class ScoreCode {
     //XML file: ROOM NAME ID DATUM
 
     public static void main(String[] args) {
+        JAXBToXML jaxb = new JAXBToXML();
+        jaxb.toMashaller();
+
+        /*
         Rooms rooms = new Rooms();
         Booking newBooking = new Booking();
         String Input = newBooking.menu();
@@ -32,5 +38,8 @@ public class ScoreCode {
             }
             Input = newBooking.menu();
         }
+
+         */
     }
+
 }

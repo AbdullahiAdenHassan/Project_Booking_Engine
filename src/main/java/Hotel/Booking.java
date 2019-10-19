@@ -42,12 +42,12 @@ public class Booking {
     public void clearConsole() {
 
         //Don't work
-        try {
+        /*try {
             Thread.sleep(3000);
             Runtime.getRuntime().exec("CLR");
         } catch (IOException | InterruptedException e) {
         }
-
+        */
         // dirty solution.
         int newLine = 0;
         while (newLine != 15) {
