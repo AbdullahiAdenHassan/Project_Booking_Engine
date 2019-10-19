@@ -2,15 +2,15 @@ package Hotel;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Rooms {
     private static HashMap<String, String> m_reservation = new HashMap();
-    private Guest m_guest;
     private List<String> m_roomslist = Arrays.asList("101", "102", "103", "104", "105");
-    private List m_bookedRooms;
+    private List<String> m_bookedRooms = new ArrayList<>();
+    private List<String> m_dates = new ArrayList<>();
+    private Guest m_guest;
     private String m_room;
-    private int m_id;
+    private String m_date;
 
     public Rooms() {
         for (String rooms : m_roomslist)
@@ -28,7 +28,7 @@ public class Rooms {
     }
 
     public void getARoomIfPossible() {
-        if (isThatRoomFree(getRoomNumber()) == true)
+        if (isThatRoomFreeTest(getRoomNumber(), m_date) == true)
             System.out.println("You have successfully booked room nr " + getRoomNumber() + "!");
         else
             System.out.println("That room is not free!");
@@ -45,17 +45,15 @@ public class Rooms {
         m_bookedRooms.forEach(x -> System.out.println("Room " + x));
     }
 
-    private boolean isThatRoomFree(String roomNumber) {
-        if (Room(roomNumber)) {
+    private boolean isThatRoomFreeTest(String roomNumber, String date) {
+        if (!m_dates.contains(date)) {
+            m_reservation.replace(roomNumber, "", m_guest.getName());
+            m_dates.add(date);
+            return true;
+        } else if (m_dates.contains(date) & !m_bookedRooms.contains(roomNumber)) {
             m_reservation.replace(roomNumber, "", m_guest.getName());
             return true;
         }
-        return false;
-    }
-
-    private boolean Room(String roomNumber) {
-        if (m_reservation.containsKey(roomNumber) & m_reservation.get(roomNumber).isEmpty())
-            return true;
         return false;
     }
 
@@ -65,5 +63,9 @@ public class Rooms {
 
     private String getRoomNumber() {
         return m_room;
+    }
+
+    public void setDate(String date) {
+        this.m_date = date;
     }
 }

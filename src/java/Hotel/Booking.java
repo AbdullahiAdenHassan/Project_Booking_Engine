@@ -32,6 +32,10 @@ public class Booking {
         m_input = in.next();
         guest.setName(m_input);
 
+        System.out.print("Entre date: ");
+        m_input = in.next();
+        rooms.setDate(m_input);
+
         rooms.getARoomIfPossible();
     }
 
