@@ -1,5 +1,8 @@
 package Hotel;
 
+import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -7,7 +10,7 @@ public class Rooms {
     private static HashMap<String, String> m_reservation = new HashMap();
     private List<String> m_roomslist = Arrays.asList("101", "102", "103", "104", "105");
     private List<String> m_bookedRooms = new ArrayList<>();
-    private List<String> m_dates = new ArrayList<>();
+    private List<LocalDate> m_dates = new ArrayList<>();
     private Guest m_guest;
     private String m_room;
     private String m_date;
@@ -45,10 +48,24 @@ public class Rooms {
         m_bookedRooms.forEach(x -> System.out.println("Room " + x));
     }
 
+    private boolean isDateFormatterCorrect(String date){
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("YYYY-MM-dd");
+        try {
+            //LocalDate.parse(date, format);
+            m_dates.add(LocalDate.parse(date, format));
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     private boolean isThatRoomFreeTest(String roomNumber, String date) {
-        if (!m_dates.contains(date)) {
+
+        if (isDateFormatterCorrect(date)) {
             m_reservation.replace(roomNumber, "", m_guest.getName());
-            m_dates.add(date);
+            m_dates.add(LocalDate.parse(date));
+            System.out.println(m_dates.add(LocalDate.parse(date)));
             return true;
         } else if (m_dates.contains(date) & !m_bookedRooms.contains(roomNumber)) {
             m_reservation.replace(roomNumber, "", m_guest.getName());
