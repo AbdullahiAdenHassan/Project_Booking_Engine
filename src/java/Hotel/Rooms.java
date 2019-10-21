@@ -51,10 +51,11 @@ public class Rooms {
     private boolean isDateFormatterCorrect(String date){
         DateTimeFormatter format = DateTimeFormatter.ofPattern("YYYY-MM-dd");
         try {
+            //LocalDate.parse(date, format);
             m_dates.add(LocalDate.parse(date, format));
             return true;
         } catch (Exception e) {
-            System.out.println("Failed to parse date");
+            e.printStackTrace();
             return false;
         }
     }
