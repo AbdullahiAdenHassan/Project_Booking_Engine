@@ -32,7 +32,7 @@ public class Booking {
         m_input = in.next();
         guest.setName(m_input);
 
-        System.out.print("Entre date: ");
+        System.out.print("Entre your date: ");
         m_input = in.next();
         rooms.setDate(m_input);
 
@@ -40,7 +40,7 @@ public class Booking {
     }
 
     public void clearConsole() {
-
+        /*
         //Don't work
         try {
             Thread.sleep(3000);
@@ -54,6 +54,8 @@ public class Booking {
             System.out.println();
             newLine++;
         }
+
+         */
     }
 
 }
