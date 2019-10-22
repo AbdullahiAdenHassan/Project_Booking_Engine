@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Booking {
-    private Scanner in = new Scanner(System.in);
+    private static Scanner in = new Scanner(System.in);
     private Guest guest = new Guest();
     private Rooms rooms = new Rooms(guest);
     private String m_input;
