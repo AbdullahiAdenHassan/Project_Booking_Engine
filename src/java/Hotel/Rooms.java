@@ -1,23 +1,21 @@
 package Hotel;
 
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Rooms {
-    private static HashMap<String, String> m_reservation = new HashMap();
+    private static HashMap<String, String> reservation = new HashMap();
     private static List<String> m_bookedRooms = new ArrayList<>();
-    private List<String> m_roomslist = Arrays.asList("101", "102", "103", "104", "105");
+    private List<String> roomslist = Arrays.asList("101", "102", "103", "104", "105");
     private List<String> m_dates = new ArrayList<>();
     private Guest m_guest;
     private String m_room;
     private String m_date;
 
     public Rooms() {
-        for (String rooms : m_roomslist)
-            m_reservation.put(rooms, "");
+        roomslist.forEach(room -> reservation.put(room,""));
     }
 
     public Rooms(Guest guest) {
@@ -27,7 +25,7 @@ public class Rooms {
 
     public void listOfAllRooms() {
         System.out.println("List of all rooms: ");
-        m_roomslist.forEach((k) -> System.out.println("\t" + k));
+        roomslist.forEach((k) -> System.out.println("\t" + k));
     }
 
     public void getARoomIfPossible() {
@@ -41,7 +39,7 @@ public class Rooms {
     }
 
     private void updateBookedRooms(){
-        m_bookedRooms = m_reservation
+        m_bookedRooms = reservation
                 .entrySet()
                 .stream()
                 .filter(m_reservation -> !m_reservation.getValue().isEmpty())
@@ -56,12 +54,12 @@ public class Rooms {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
             date = formatter.format(localDate);
             if (!m_dates.contains(date)) {
-                m_reservation.replace(roomNumber, "", m_guest.getName());
+                reservation.replace(roomNumber, "", m_guest.getName());
                 updateBookedRooms();
                 m_dates.add(date);
                 return true;
             } else if (!m_bookedRooms.contains(roomNumber)) {
-                m_reservation.replace(roomNumber, "", m_guest.getName());
+                reservation.replace(roomNumber, "", m_guest.getName());
                 updateBookedRooms();
                 return true;
             }
@@ -77,6 +75,7 @@ public class Rooms {
         this.m_room = room;
     }
 
+    //ctrl+shift +t
     private String getRoomNumber() {
         return m_room;
     }
