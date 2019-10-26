@@ -1,4 +1,4 @@
-package modelling;
+package main.modelling;
 
 import java.util.Objects;
 
@@ -7,7 +7,7 @@ import static org.apache.commons.lang3.Validate.isTrue;
 public class RoomNumber {
     private final int value;
 
-    RoomNumber(final int value) {
+    public RoomNumber(final int value) {
         isTrue(value > 0);
         this.value = value;
     }
@@ -31,8 +31,6 @@ public class RoomNumber {
 
     @Override
     public String toString() {
-        return "RoomNumber{" +
-                "value=" + value +
-                '}';
+        return ""+value;
     }
 }

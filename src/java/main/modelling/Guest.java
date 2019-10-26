@@ -1,12 +1,12 @@
-package modelling;
+package main.modelling;
 
 import java.util.Objects;
 
 public class Guest {
     private final String name;
 
-    private Guest(final  String name) {
-        this.name = name;
+    private Guest(final String fullname) {
+        this.name = fullname;
     }
 
     public static Guest of(final String fullname){
@@ -32,8 +32,6 @@ public class Guest {
 
     @Override
     public String toString() {
-        return "Guest{" +
-                "name='" + name + '\'' +
-                '}';
+        return ""+ name ;
     }
 }

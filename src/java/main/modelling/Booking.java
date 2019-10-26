@@ -1,4 +1,4 @@
-package modelling;
+package main.modelling;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -18,8 +18,16 @@ public class Booking {
         return new Booking(room,date,guest);
     }
 
-    public Room getRoom() {
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public Room getBookedRoom(){
         return room;
+    }
+
+    public Guest getGuest() {
+        return guest;
     }
 
     @Override
@@ -39,18 +47,8 @@ public class Booking {
 
     @Override
     public String toString() {
-        return "Booking{" +
-                "room=" + room +
-                ", date=" + date +
-                ", guest=" + guest +
-                '}';
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public Guest getGuest() {
-        return guest;
+        return "Room: "+room +
+                ", Date: " + date +
+                ", Guest: " + guest;
     }
 }

@@ -1,5 +1,5 @@
 # Project_Booking_Engine
-Buildning a booking engine that will include all functionalites of a hotel services.
+Building a booking engine that will include all functionality of a hotel services.
 
 ### Requirements
 1. List Rooms

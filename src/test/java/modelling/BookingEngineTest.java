@@ -1,5 +1,7 @@
 package modelling;
 
+
+import main.modelling.*;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +32,7 @@ class BookingEngineTest {
 
         engine.addBooking(booking);
 
-        var bookings = engine.listBookings();
+        var bookings = engine.listAllBookedRooms();
         assertEquals(1, bookings.size());
         assertEquals(bookings.get(0), booking);
     }
@@ -52,7 +54,7 @@ class BookingEngineTest {
             engine.addBooking(booking1);
             engine.addBooking(booking2);
         } catch (Exception e) {
-            var bookings = engine.listBookings();
+            var bookings = engine.listAllBookedRooms();
             assertEquals(1, bookings.size());
             assertEquals(bookings.get(0), booking1);
         }
@@ -70,7 +72,7 @@ class BookingEngineTest {
         try {
             engine.addBooking(booking);
         } catch (Exception e) {
-            assertTrue(engine.listBookings().isEmpty());
+            assertTrue(engine.listAllBookedRooms().isEmpty());
         }
         fail();
     }

@@ -1,3 +1,5 @@
+package Hotel;
+
 import Hotel.Booking;
 import Hotel.Rooms;
 

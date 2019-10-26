@@ -1,4 +1,4 @@
-package modelling;
+package main.modelling;
 
 import java.util.Objects;
 
@@ -9,6 +9,10 @@ public class Room {
 
     public Room(final RoomNumber roomNumber) {
         this.roomNumber = notNull(roomNumber);
+    }
+
+    public RoomNumber getRoomNumber() {
+        return roomNumber;
     }
 
     @Override
@@ -25,7 +29,8 @@ public class Room {
     }
 
     @Override
-    public String toString() {
-        return "Room number " + roomNumber.getValue();
+    public String
+    toString() {
+        return ""+roomNumber;
     }
 }
