@@ -5,21 +5,28 @@ import java.util.Objects;
 
 public class Booking {
     private final Room room;
-    private final LocalDate date;
+    private final LocalDate arrivalDate;
+    private final LocalDate departureDate;
     private final Guest guest;
 
-    private Booking(Room room, LocalDate date, Guest guest) {
+    private Booking(Room room, LocalDate arrivalDate, LocalDate departureDate, Guest guest) {
         this.room = room;
-        this.date = date;
+        this.arrivalDate = arrivalDate;
+        this.departureDate = departureDate;
         this.guest = guest;
     }
 
-    public static Booking of(Room room, LocalDate date, Guest guest) {
-        return new Booking(room,date,guest);
+    public static Booking of(Room room, LocalDate arrivalDate,LocalDate departureDate, Guest guest) {
+        return new Booking(room,arrivalDate,departureDate,guest);
     }
 
-    public LocalDate getDate() {
-        return date;
+
+    public LocalDate getArrivalDate() {
+        return arrivalDate;
+    }
+
+    public LocalDate getDepartureDate() {
+        return departureDate;
     }
 
     public Room getBookedRoom(){
@@ -36,19 +43,19 @@ public class Booking {
         if (!(o instanceof Booking)) return false;
         Booking booking = (Booking) o;
         return Objects.equals(room, booking.room) &&
-                Objects.equals(date, booking.date) &&
+                Objects.equals(arrivalDate, booking.arrivalDate) &&
                 Objects.equals(guest, booking.guest);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(room, date, guest);
+        return Objects.hash(room, arrivalDate, guest);
     }
 
     @Override
     public String toString() {
         return "Room: "+room +
-                ", Date: " + date +
+                ", Date: " + arrivalDate +
                 ", Guest: " + guest;
     }
 }
