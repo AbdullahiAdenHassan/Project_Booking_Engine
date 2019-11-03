@@ -58,4 +58,5 @@ public class Booking {
                 ", Date: " + arrivalDate +
                 ", Guest: " + guest;
     }
+
 }

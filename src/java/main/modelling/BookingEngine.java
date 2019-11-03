@@ -1,8 +1,10 @@
 package main.modelling;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 public class BookingEngine {
     private final Set<Room> rooms;
@@ -36,31 +38,38 @@ public class BookingEngine {
     }
 
     private boolean isThatRoomFreeASpecificDate(Booking booking) {
-        return isThatDateAcceptable(booking) && isThatRoomFree(booking);
+        if (reservations.isEmpty() || !getBookedRooms().contains(booking.getBookedRoom().getRoomNumber().getValue()))
+            return isThatDateAcceptable(booking);
+        else
+            return isThatDateAcceptable(booking) && isAvailable(booking);
     }
 
+    private boolean isAvailable(Booking booking) {
+        List<Booking> checkReservation = getSortedBookedDates(booking.getBookedRoom().getRoomNumber().getValue());
+        for (int i = 0; i < checkReservation.size(); i++) {
 
-    private boolean isThatRoomFree(Booking booking) {
-        AtomicBoolean isThatRoomFree = new AtomicBoolean(false);
-        if (!getBookedRooms().contains(booking.getBookedRoom().getRoomNumber().getValue()))
-            isThatRoomFree.set(true);
-        else {
-            reservations.stream().forEach(checkDate -> {
-                if (booking.getArrivalDate().isBefore(checkDate.getArrivalDate())
-                        && booking.getDepartureDate().isEqual(checkDate.getArrivalDate())
-                        || booking.getDepartureDate().isBefore(checkDate.getArrivalDate()))
-                    isThatRoomFree.set(true);
+            if (booking.getArrivalDate().isEqual(checkReservation.get(i).getArrivalDate())
+                    && booking.getDepartureDate().isEqual(checkReservation.get(i).getDepartureDate()))
+                return false;
 
-                if (booking.getArrivalDate().isEqual(checkDate.getDepartureDate())
-                        || booking.getArrivalDate().isAfter(checkDate.getDepartureDate()))
-                    isThatRoomFree.set(true);
-            });
+            if (booking.getArrivalDate().isAfter(checkReservation.get(i).getArrivalDate())
+                    && booking.getDepartureDate().isBefore(checkReservation.get(i).getDepartureDate()))
+                return false;
+
+            if (booking.getArrivalDate().isBefore(checkReservation.get(i).getArrivalDate())
+                    && (booking.getDepartureDate().isBefore(checkReservation.get(i).getDepartureDate())
+                    || booking.getDepartureDate().isAfter(checkReservation.get(i).getDepartureDate())
+                    || booking.getDepartureDate().isEqual(checkReservation.get(i).getDepartureDate())))
+                return false;
+
         }
-        return isThatRoomFree.get();
+
+        return true;
     }
 
     private boolean isThatDateAcceptable(Booking booking) {
-        if (booking.getArrivalDate().isEqual(LocalDate.now()) | booking.getArrivalDate().isAfter(LocalDate.now()))
+        if (booking.getArrivalDate().isEqual(LocalDate.now())
+                || booking.getArrivalDate().isAfter(LocalDate.now()))
             return true;
         return false;
     }
@@ -73,4 +82,17 @@ public class BookingEngine {
                 });
         return listOfBookedRooms;
     }
+
+    private List<Booking> getSortedBookedDates(int roomNumber) {
+        return reservations.stream()
+                .filter(b -> {
+                    if (roomNumber != b.getBookedRoom().getRoomNumber().getValue())
+                        return false;
+                    else
+                        return true;
+                })
+                .sorted(Comparator.comparing(Booking::getArrivalDate))
+                .collect(Collectors.toList());
+    }
 }
+//(b1,b2)->b1.getArrivalDate().compareTo(b2.getArrivalDate()) is the same as Comparator.comparing(Booking::getArrivalDate)
