@@ -1,4 +1,4 @@
-package main.modelling;
+package main;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -58,4 +58,5 @@ public class Booking {
                 ", Date: " + arrivalDate +
                 ", Guest: " + guest;
     }
+
 }

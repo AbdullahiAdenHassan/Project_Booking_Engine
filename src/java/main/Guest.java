@@ -1,4 +1,4 @@
-package main.modelling;
+package main;
 
 import java.util.Objects;
 
