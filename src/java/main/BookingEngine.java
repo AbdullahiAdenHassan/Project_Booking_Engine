@@ -58,7 +58,6 @@ public class BookingEngine {
                     || booking.getDepartureDate().isEqual(checkReservation.get(i).getDepartureDate())))
                 return false;
         }
-
         return true;
     }
 
