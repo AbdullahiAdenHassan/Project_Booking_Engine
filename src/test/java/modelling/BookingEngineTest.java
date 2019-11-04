@@ -2,7 +2,9 @@ package modelling;
 
 import main.*;
 import org.junit.jupiter.api.Test;
+
 import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class BookingEngineTest {
@@ -18,8 +20,9 @@ class BookingEngineTest {
     @Test
     void bookARoom() {
         Booking booking = Booking.of(
-                new Room(new RoomNumber(101)),
-                LocalDate.now(), LocalDate.now().plusDays(1),
+                Room.of(101),
+                LocalDate.now(),
+                LocalDate.now().plusDays(1),
                 Guest.of("Abbe"));
         try {
             engine.bookARoom(booking);
@@ -34,8 +37,9 @@ class BookingEngineTest {
     @Test
     void youCanNotBookARoomInThePast() {
         Booking booking = Booking.of(
-                new Room(new RoomNumber(101)),
-                LocalDate.now().minusDays(1), LocalDate.now(),
+                Room.of(101),
+                LocalDate.now().minusDays(1),
+                LocalDate.now(),
                 Guest.of("Abbe"));
         try {
             engine.bookARoom(booking);
@@ -49,12 +53,14 @@ class BookingEngineTest {
     @Test
     void youCanNotBookARoomTwiceOnTheSameDay() {
         Booking booking1 = Booking.of(
-                new Room(new RoomNumber(101)), LocalDate.now(),
+                Room.of(101),
+                LocalDate.now(),
                 LocalDate.now().plusDays(1),
                 Guest.of("Abbe"));
 
         Booking booking2 = Booking.of(
-                new Room(new RoomNumber(101)), LocalDate.now(),
+                Room.of(101),
+                LocalDate.now(),
                 LocalDate.now().plusDays(1),
                 Guest.of("Edward"));
 
@@ -73,9 +79,9 @@ class BookingEngineTest {
 
     @Test
     void youShouldBeAbleTooBookARoomOverSereralDays() {
-        Booking booking1 = Booking.of(new Room(new RoomNumber(101)), LocalDate.now(), LocalDate.now().plusDays(2), Guest.of("Abbe"));
-        Booking booking2 = Booking.of(new Room(new RoomNumber(101)), LocalDate.now().plusDays(2), LocalDate.now().plusDays(4), Guest.of("Anders"));
-        Booking booking3 = Booking.of(new Room(new RoomNumber(101)), LocalDate.now().plusDays(4), LocalDate.now().plusDays(6), Guest.of("Edward"));
+        Booking booking1 = Booking.of(Room.of(101), LocalDate.now(), LocalDate.now().plusDays(2), Guest.of("Abbe"));
+        Booking booking2 = Booking.of(Room.of(101), LocalDate.now().plusDays(2), LocalDate.now().plusDays(4), Guest.of("Anders"));
+        Booking booking3 = Booking.of(Room.of(101), LocalDate.now().plusDays(4), LocalDate.now().plusDays(6), Guest.of("Edward"));
         try {
             engine.bookARoom(booking1);
             engine.bookARoom(booking2);
@@ -84,13 +90,13 @@ class BookingEngineTest {
 
             assertEquals(engine.listAllBookedRooms().get(0).getArrivalDate(), LocalDate.now());
             assertEquals(engine.listAllBookedRooms().get(0).getDepartureDate(), LocalDate.now().plusDays(2));
-            assertEquals(engine.listAllBookedRooms().get(0).getBookedRoom().getRoomNumber().getValue(), 101);
+            assertEquals(engine.listAllBookedRooms().get(0).getBookedRoom().getRoomNumber(), 101);
 
             assertEquals(engine.listAllBookedRooms().get(1).getGuest().getName(), "Anders");
-            assertEquals(engine.listAllBookedRooms().get(1).getBookedRoom().getRoomNumber().getValue(), 101);
+            assertEquals(engine.listAllBookedRooms().get(1).getBookedRoom().getRoomNumber(), 101);
 
             assertEquals(engine.listAllBookedRooms().get(2).getGuest().getName(), "Edward");
-            assertEquals(engine.listAllBookedRooms().get(2).getBookedRoom().getRoomNumber().getValue(), 101);
+            assertEquals(engine.listAllBookedRooms().get(2).getBookedRoom().getRoomNumber(), 101);
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -99,9 +105,9 @@ class BookingEngineTest {
 
     @Test
     void youShouldBeAbleTooBookARoomOverSereralDays2() {
-        Booking booking1 = Booking.of(new Room(new RoomNumber(101)), LocalDate.now().plusDays(4), LocalDate.now().plusDays(6), Guest.of("Edward"));
-        Booking booking2 = Booking.of(new Room(new RoomNumber(101)), LocalDate.now().plusDays(2), LocalDate.now().plusDays(4), Guest.of("Anders"));
-        Booking booking3 = Booking.of(new Room(new RoomNumber(101)), LocalDate.now(), LocalDate.now().plusDays(2), Guest.of("Abbe"));
+        Booking booking1 = Booking.of(Room.of(101), LocalDate.now().plusDays(4), LocalDate.now().plusDays(6), Guest.of("Edward"));
+        Booking booking2 = Booking.of(Room.of(101), LocalDate.now().plusDays(2), LocalDate.now().plusDays(4), Guest.of("Anders"));
+        Booking booking3 = Booking.of(Room.of(101), LocalDate.now(), LocalDate.now().plusDays(2), Guest.of("Abbe"));
         try {
             engine.bookARoom(booking1);
             engine.bookARoom(booking2);
@@ -113,41 +119,40 @@ class BookingEngineTest {
     }
 
 
-
     @Test
     void youShouldNotBeAbleTooBookARoomInTheMiddleOfABookedDate() {
-        Booking booking1 = Booking.of(new Room(new RoomNumber(101)), LocalDate.now().plusDays(2), LocalDate.now().plusDays(4), Guest.of("Abbe"));
-        Booking booking2 = Booking.of(new Room(new RoomNumber(101)), LocalDate.now(), LocalDate.now().plusDays(6), Guest.of("Anders"));
+        Booking booking1 = Booking.of(Room.of(101), LocalDate.now().plusDays(2), LocalDate.now().plusDays(4), Guest.of("Abbe"));
+        Booking booking2 = Booking.of(Room.of(101), LocalDate.now(), LocalDate.now().plusDays(6), Guest.of("Anders"));
         try {
             engine.bookARoom(booking1);
             engine.bookARoom(booking2);
             fail();
         } catch (Exception e) {
             System.out.println("Trying too book a room in the middle of a booked date,exception thrown!");
-            assertEquals(engine.listAllBookedRooms().size(),1);
+            assertEquals(engine.listAllBookedRooms().size(), 1);
         }
     }
 
     @Test
     void youShouldNotBeAbleTooBookARoomBetweenBookedDates() {
-        Booking booking1 = Booking.of(new Room(new RoomNumber(101)), LocalDate.now(), LocalDate.now().plusDays(4), Guest.of("Abbe"));
-        Booking booking2 = Booking.of(new Room(new RoomNumber(101)), LocalDate.now().plusDays(1), LocalDate.now().plusDays(2), Guest.of("Anders"));
+        Booking booking1 = Booking.of(Room.of(101), LocalDate.now(), LocalDate.now().plusDays(4), Guest.of("Abbe"));
+        Booking booking2 = Booking.of(Room.of(101), LocalDate.now().plusDays(1), LocalDate.now().plusDays(2), Guest.of("Anders"));
         try {
             engine.bookARoom(booking1);
             engine.bookARoom(booking2);
             fail("illegal booking!");
         } catch (Exception e) {
             System.out.println("Trying to book a room between a booked date, exception thrown!");
-           assertEquals(engine.listAllBookedRooms().size(),1);
-           assertEquals(engine.listAllBookedRooms().get(0).getGuest().getName(),"Abbe");
+            assertEquals(engine.listAllBookedRooms().size(), 1);
+            assertEquals(engine.listAllBookedRooms().get(0).getGuest().getName(), "Abbe");
         }
     }
 
     @Test
     void youShouldBeAbleTooBookMultipleRoomsOnTheSameDate() {
-        Booking booking1 = Booking.of(new Room(new RoomNumber(101)), LocalDate.now(), LocalDate.now().plusDays(2), Guest.of("Abbe"));
-        Booking booking2 = Booking.of(new Room(new RoomNumber(102)), LocalDate.now(), LocalDate.now().plusDays(2), Guest.of("Anders"));
-        Booking booking3 = Booking.of(new Room(new RoomNumber(103)), LocalDate.now(), LocalDate.now().plusDays(2), Guest.of("Edward"));
+        Booking booking1 = Booking.of(Room.of(101), LocalDate.now(), LocalDate.now().plusDays(2), Guest.of("Abbe"));
+        Booking booking2 = Booking.of(Room.of(102), LocalDate.now(), LocalDate.now().plusDays(2), Guest.of("Anders"));
+        Booking booking3 = Booking.of(Room.of(103), LocalDate.now(), LocalDate.now().plusDays(2), Guest.of("Edward"));
 
         try {
             engine.bookARoom(booking1);

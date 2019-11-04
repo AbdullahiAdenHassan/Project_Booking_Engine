@@ -2,25 +2,32 @@ package main;
 
 import java.util.Objects;
 
+import static org.apache.commons.lang3.Validate.isTrue;
 import static org.apache.commons.lang3.Validate.notNull;
 
 public class Room {
-    private final RoomNumber roomNumber;
+    private int roomNumber;
 
-    public Room(final RoomNumber roomNumber) {
-        this.roomNumber = notNull(roomNumber);
+    private Room(final int roomNumber) {
+        notNull(roomNumber);
+        isTrue(roomNumber > 0);
+        this.roomNumber = roomNumber;
     }
 
-    public RoomNumber getRoomNumber() {
+    public static Room of(final int roomNumber) {
+        return new Room(roomNumber);
+    }
+
+    public int getRoomNumber(){
         return roomNumber;
     }
 
     @Override
-    public boolean equals(final Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final Room room = (Room) o;
-        return Objects.equals(roomNumber, room.roomNumber);
+        if (!(o instanceof Room)) return false;
+        Room room = (Room) o;
+        return roomNumber == room.roomNumber;
     }
 
     @Override
@@ -29,8 +36,7 @@ public class Room {
     }
 
     @Override
-    public String
-    toString() {
-        return ""+roomNumber;
+    public String toString() {
+        return "" + roomNumber;
     }
 }

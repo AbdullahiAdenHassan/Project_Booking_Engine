@@ -10,12 +10,11 @@ public class BookingEngine {
 
     public BookingEngine() {
         this.rooms = Set.of(
-                new Room(new RoomNumber(101)),
-                new Room(new RoomNumber(102)),
-                new Room(new RoomNumber(103)),
-                new Room(new RoomNumber(104)),
-                new Room(new RoomNumber(105))
-        );
+                Room.of(101),
+                Room.of(102),
+                Room.of(103),
+                Room.of(104),
+                Room.of(105));
     }
 
     public Set<Room> listAllRooms() {
@@ -36,14 +35,14 @@ public class BookingEngine {
     }
 
     private boolean isThatRoomFreeASpecificDate(Booking booking) {
-        if (reservations.isEmpty() || !getBookedRooms().contains(booking.getBookedRoom().getRoomNumber().getValue()))
+        if (reservations.isEmpty() || !getBookedRooms().contains(booking.getBookedRoom().getRoomNumber()))
             return isThatDateAcceptable(booking);
         else
             return isThatDateAcceptable(booking) && isAvailable(booking);
     }
 
     private boolean isAvailable(Booking booking) {
-        List<Booking> checkReservation = getSortedBookedDates(booking.getBookedRoom().getRoomNumber().getValue());
+        List<Booking> checkReservation = getSortedBookedDates(booking.getBookedRoom().getRoomNumber());
         for (int i = 0; i < checkReservation.size(); i++) {
 
             if (booking.getArrivalDate().isEqual(checkReservation.get(i).getArrivalDate())
@@ -74,7 +73,7 @@ public class BookingEngine {
         List<Integer> listOfBookedRooms = new ArrayList<>();
         reservations.stream()
                 .forEach(reservation -> {
-                    listOfBookedRooms.add(reservation.getBookedRoom().getRoomNumber().getValue());
+                    listOfBookedRooms.add(reservation.getBookedRoom().getRoomNumber());
                 });
         return listOfBookedRooms;
     }
@@ -82,7 +81,7 @@ public class BookingEngine {
     private List<Booking> getSortedBookedDates(int roomNumber) {
         return reservations.stream()
                 .filter(b -> {
-                    if (roomNumber != b.getBookedRoom().getRoomNumber().getValue())
+                    if (roomNumber != b.getBookedRoom().getRoomNumber())
                         return false;
                     else
                         return true;

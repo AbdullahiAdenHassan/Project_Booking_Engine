@@ -2,10 +2,15 @@ package main;
 
 import java.util.Objects;
 
+import static org.apache.commons.lang3.Validate.isTrue;
+import static org.apache.commons.lang3.Validate.notNull;
+
 public class Guest {
     private final String name;
 
     private Guest(final String fullname) {
+        notNull(fullname);
+        isTrue(fullname.matches("^[a-zA-Z]+"));
         this.name = fullname;
     }
 
