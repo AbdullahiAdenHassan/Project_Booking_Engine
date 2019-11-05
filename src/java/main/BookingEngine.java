@@ -57,6 +57,14 @@ public class BookingEngine {
                     && (booking.getDepartureDate().isAfter(checkReservation.get(i).getDepartureDate())
                     || booking.getDepartureDate().isEqual(checkReservation.get(i).getDepartureDate())))
                 return false;
+
+            if (booking.getArrivalDate().isAfter(checkReservation.get(i).getArrivalDate())
+                    && booking.getArrivalDate().isBefore(checkReservation.get(i).getDepartureDate()))
+                return false;
+
+            if(booking.getDepartureDate().isAfter(checkReservation.get(i).getArrivalDate())
+            && booking.getDepartureDate().isBefore(checkReservation.get(i).getDepartureDate()))
+                return false;
         }
         return true;
     }

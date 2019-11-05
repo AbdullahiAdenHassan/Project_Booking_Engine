@@ -105,13 +105,13 @@ class BookingEngineTest {
 
     @Test
     void youShouldBeAbleTooBookARoomOverSereralDays2() {
-        Booking booking1 = Booking.of(Room.of(101), LocalDate.now().plusDays(4), LocalDate.now().plusDays(6), Guest.of("Edward"));
         Booking booking2 = Booking.of(Room.of(101), LocalDate.now().plusDays(2), LocalDate.now().plusDays(4), Guest.of("Anders"));
+        Booking booking1 = Booking.of(Room.of(101), LocalDate.now().plusDays(4), LocalDate.now().plusDays(6), Guest.of("Edward"));
         Booking booking3 = Booking.of(Room.of(101), LocalDate.now(), LocalDate.now().plusDays(2), Guest.of("Abbe"));
         try {
-            engine.bookARoom(booking1);
             engine.bookARoom(booking2);
             engine.bookARoom(booking3);
+            engine.bookARoom(booking1);
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -161,6 +161,34 @@ class BookingEngineTest {
             System.out.println("Multiple rums has been booked on the same date!");
         } catch (Exception e) {
             fail();
+        }
+    }
+
+    @Test
+    void youShouldBeAbleTooBookMultipleRoomsOnTheSameDate2() {
+        Booking booking1 = Booking.of(Room.of(101), LocalDate.now().plusDays(2), LocalDate.now().plusDays(4), Guest.of("Abbe"));
+        Booking booking2 = Booking.of(Room.of(101), LocalDate.now(), LocalDate.now().plusDays(3), Guest.of("Anders"));
+
+
+        try {
+            engine.bookARoom(booking1);
+            engine.bookARoom(booking2);
+            fail();
+        } catch (Exception e) {
+            System.out.println("The second booking collides with a booking that already exist!");
+        }
+    }
+
+    @Test // delete later!
+    void youShouldBeAbleTooBookMultipleRoomsOnTheSameDate3() {
+        Booking booking1 = Booking.of(Room.of(101), LocalDate.now().plusDays(2), LocalDate.now().plusDays(4), Guest.of("Abbe"));
+        Booking booking2 = Booking.of(Room.of(101), LocalDate.now(), LocalDate.now().plusDays(3), Guest.of("Anders"));
+        try {
+            engine.bookARoom(booking2);
+            engine.bookARoom(booking1);
+            fail();
+        } catch (Exception e) {
+            System.out.println("The second booking collides with a booking that already exist!");
         }
     }
 }
