@@ -21,13 +21,17 @@ public class BookingEngine {
         return rooms;
     }
 
-    public void bookARoom(Booking booking) throws Exception {
+    public void bookARoom(Booking booking) {
+        boolean isThatRoomFreeASpecificDate = isThatRoomFreeASpecificDate(booking);
+        boolean isThatRoomAcceptable = rooms.contains(Room.of(booking.getBookedRoom().getRoomNumber()));
 
-        if (isThatRoomFreeASpecificDate(booking)) {
-            reservations.add(booking);
-        } else {
-            throw new Exception();
-        }
+        if (!isThatRoomAcceptable)
+            throw new IllegalArgumentException();
+
+        if (!isThatRoomFreeASpecificDate)
+            throw new RuntimeException();
+
+        reservations.add(booking);
     }
 
     public List<Booking> listAllBookedRooms() {
@@ -62,8 +66,8 @@ public class BookingEngine {
                     && booking.getArrivalDate().isBefore(checkReservation.get(i).getDepartureDate()))
                 return false;
 
-            if(booking.getDepartureDate().isAfter(checkReservation.get(i).getArrivalDate())
-            && booking.getDepartureDate().isBefore(checkReservation.get(i).getDepartureDate()))
+            if (booking.getDepartureDate().isAfter(checkReservation.get(i).getArrivalDate())
+                    && booking.getDepartureDate().isBefore(checkReservation.get(i).getDepartureDate()))
                 return false;
         }
         return true;
@@ -78,7 +82,8 @@ public class BookingEngine {
 
     private List<Integer> getBookedRooms() {
         List<Integer> listOfBookedRooms = new ArrayList<>();
-        reservations.stream()
+        reservations
+                .stream()
                 .forEach(reservation -> {
                     listOfBookedRooms.add(reservation.getBookedRoom().getRoomNumber());
                 });
@@ -86,7 +91,8 @@ public class BookingEngine {
     }
 
     private List<Booking> getSortedBookedDates(int roomNumber) {
-        return reservations.stream()
+        return reservations
+                .stream()
                 .filter(b -> {
                     if (roomNumber != b.getBookedRoom().getRoomNumber())
                         return false;

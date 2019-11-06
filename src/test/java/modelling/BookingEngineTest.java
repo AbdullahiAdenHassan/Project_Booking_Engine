@@ -1,6 +1,9 @@
 package modelling;
 
-import main.*;
+import main.Booking;
+import main.BookingEngine;
+import main.Guest;
+import main.Room;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -11,14 +14,14 @@ class BookingEngineTest {
     private BookingEngine engine = new BookingEngine();
 
     @Test
-    void listAllRooms() {
+    void youShouldbeAbleTolistAllRooms() {
         assertTrue((!engine.listAllRooms().isEmpty()));
         assertTrue(engine.listAllRooms().size() == 5);
         System.out.println("Successful, listing all rooms!");
     }
 
     @Test
-    void bookARoom() {
+    void youShouldBeAbleToBookARoom() {
         Booking booking = Booking.of(
                 Room.of(101),
                 LocalDate.now(),
@@ -35,19 +38,23 @@ class BookingEngineTest {
     }
 
     @Test
+    void youShouldNotBeAbleToBookANonExistingRoom() {
+        Booking booking = Booking.of(Room.of(110),LocalDate.now(),
+                LocalDate.now().plusDays(1),
+                Guest.of("Abbe"));
+        assertThrows(IllegalArgumentException.class,()->engine.bookARoom(booking));
+        assertTrue(engine.listAllBookedRooms().isEmpty());
+    }
+
+    @Test
     void youCanNotBookARoomInThePast() {
         Booking booking = Booking.of(
                 Room.of(101),
                 LocalDate.now().minusDays(1),
                 LocalDate.now(),
                 Guest.of("Abbe"));
-        try {
-            engine.bookARoom(booking);
-            fail();
-        } catch (Exception e) {
-            assertTrue(!engine.listAllBookedRooms().contains(booking));
-            System.out.println("You can not booking a room in the past, exception thrown!");
-        }
+        assertThrows(RuntimeException.class, () -> engine.bookARoom(booking));
+        assertFalse(engine.listAllBookedRooms().contains(booking));
     }
 
     @Test
@@ -179,35 +186,4 @@ class BookingEngineTest {
         }
     }
 
-    @Test // delete later!
-    void youShouldBeAbleTooBookMultipleRoomsOnTheSameDate3() {
-        Booking booking1 = Booking.of(Room.of(101), LocalDate.now().plusDays(2), LocalDate.now().plusDays(4), Guest.of("Abbe"));
-        Booking booking2 = Booking.of(Room.of(101), LocalDate.now(), LocalDate.now().plusDays(3), Guest.of("Anders"));
-        try {
-            engine.bookARoom(booking2);
-            engine.bookARoom(booking1);
-            fail();
-        } catch (Exception e) {
-            System.out.println("The second booking collides with a booking that already exist!");
-        }
-    }
 }
-
-/*
-@Test
-    void Example() {
-        Booking booking1 = Booking.of(
-                new Room(new RoomNumber(105)), LocalDate.now().plusDays(1),
-                LocalDate.now().plusDays(1),
-                Guest.of("Abbe"));
-        Booking booking2 = Booking.of(
-                new Room(new RoomNumber(102)), LocalDate.now(),
-                LocalDate.now().plusDays(1),
-                Guest.of("Edward"));
-
-        Stream.of(booking1, booking2)
-                .sorted((b1, b2) -> b1.getBookedRoom().getRoomNumber().getValue() - b2.getBookedRoom().getRoomNumber().getValue())
-                .map(booking -> booking.getGuest().getName())
-                .forEach(name -> System.out.println(name));
-    }
- */
