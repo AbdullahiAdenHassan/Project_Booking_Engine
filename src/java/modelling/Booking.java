@@ -22,6 +22,10 @@ public class Booking {
         this.departureDate = builder.departureDate;
     }
 
+    public static Builder builder(){
+        return new Builder();
+    }
+
     public static class Builder {
         private int room;
         private String guest;

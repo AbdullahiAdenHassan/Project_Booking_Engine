@@ -17,7 +17,7 @@ class BookingEngineTest2 {
     @Test
     void youShouldBookARoom() {
         BookingEngine bookingEngine =  new BookingEngine();
-        Booking booking = new Booking.Builder()
+        Booking booking = Booking.builder()
                 .room(101)
                 .withGuest("Abbe")
                 .withArrivalDate(LocalDate.now())
