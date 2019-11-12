@@ -11,6 +11,23 @@ public class BookingEngine {
     private final Set<Integer> rooms;
     private List<Booking> reservations = new ArrayList<>();
 
+    // 1. dep inject an inventory
+    // 2. you should be able too book multiple hotels
+
+    // Inventory class to keep the inventory of rooms
+    // Dependency inject the inventory to the BookingEngine
+    // i.e. 'public BookingEngine(final Inventory inventory)
+    //
+    // List<Hotel> inventory.hotels()
+    // List<Room>  hotel.rooms()
+
+    // Map<Hotel, List<Booking>>
+
+    // Exempel:
+    // hotel 2, rum 100, .....
+    // inventory.getHotel(2).getRooms().includes(rum 100);
+    // reservationsForHotel2 = reservations.getForHotel(2);
+    // the usual check....
 
     public BookingEngine() {
         this.rooms = Set.of(

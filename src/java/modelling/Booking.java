@@ -7,6 +7,7 @@ import static org.apache.commons.lang3.Validate.notNull;
 public class Booking {
 
     private final int room;
+    // HOTEL
     private final String guest;
     private final LocalDate arrivalDate;
     private final LocalDate departureDate;
