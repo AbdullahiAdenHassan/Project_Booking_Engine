@@ -2,6 +2,9 @@ package modelling;
 
 import java.util.List;
 
+import static org.apache.commons.lang3.Validate.isTrue;
+import static org.apache.commons.lang3.Validate.notNull;
+
 public class Hotel {
 
     private final Id hotelID;
@@ -25,16 +28,19 @@ public class Hotel {
         private List<Room> room;
 
         public Builder hotelID(final int hotelID) {
+            isTrue(hotelID > 0);
             this.hotelID = Id.of(hotelID);
             return this;
         }
 
         public Builder withHotelName(final String hotelName) {
+            notNull(hotelName);
             this.hotelName = Brand.of(hotelName);
             return this;
         }
 
         public Builder withListOfRoom(final List<Room> room) {
+            notNull(room);
             this.room = room;
             return this;
         }

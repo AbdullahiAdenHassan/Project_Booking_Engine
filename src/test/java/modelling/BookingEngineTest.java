@@ -18,7 +18,7 @@ class BookingEngineTest {
     @Test
     void youShouldBeAbleToBookARoom() {
         Booking booking = Booking.builder()
-                .hotelID(1)
+                .withHotelId(1)
                 .withRoom(101)
                 .withArrivalDate(LocalDate.now())
                 .withDepartureDate(LocalDate.now().plusDays(2))
@@ -33,7 +33,7 @@ class BookingEngineTest {
     @Test
     void youShouldNotBeAbleToBookANonExistingRoom() {
         Booking booking = Booking.builder()
-                .hotelID(1)
+                .withHotelId(1)
                 .withRoom(103)
                 .withArrivalDate(LocalDate.now())
                 .withDepartureDate(LocalDate.now().plusDays(1))
@@ -48,7 +48,7 @@ class BookingEngineTest {
     @Test
     void youCanNotBookARoomInThePast() {
         Booking booking = Booking.builder()
-                .hotelID(1)
+                .withHotelId(1)
                 .withRoom(101)
                 .withArrivalDate(LocalDate.now().minusDays(1))
                 .withDepartureDate(LocalDate.now().plusDays(1))
@@ -63,7 +63,7 @@ class BookingEngineTest {
     void youCanNotBookARoomTwiceOnTheSameDay() {
 
         Booking booking1 = Booking.builder()
-                .hotelID(1)
+                .withHotelId(1)
                 .withRoom(101)
                 .withArrivalDate(LocalDate.now())
                 .withDepartureDate(LocalDate.now().plusDays(1))
@@ -71,7 +71,7 @@ class BookingEngineTest {
                 .build();
 
         Booking booking2 = Booking.builder()
-                .hotelID(2)
+                .withHotelId(2)
                 .withRoom(101)
                 .withArrivalDate(LocalDate.now())
                 .withDepartureDate(LocalDate.now().plusDays(1))
@@ -80,7 +80,7 @@ class BookingEngineTest {
 
 
         Booking booking3 = Booking.builder()
-                .hotelID(1)
+                .withHotelId(1)
                 .withRoom(101)
                 .withArrivalDate(LocalDate.now())
                 .withDepartureDate(LocalDate.now().plusDays(1))
@@ -99,7 +99,7 @@ class BookingEngineTest {
     @Test
     void youShouldBeAbleTooBookARoomOverSeveralDays() {
         Booking booking1 = Booking.builder()
-                .hotelID(1)
+                .withHotelId(1)
                 .withRoom(101)
                 .withArrivalDate(LocalDate.now())
                 .withDepartureDate(LocalDate.now().plusDays(2))
@@ -107,7 +107,7 @@ class BookingEngineTest {
                 .build();
 
         Booking booking2 = Booking.builder()
-                .hotelID(1)
+                .withHotelId(1)
                 .withRoom(101)
                 .withArrivalDate(LocalDate.now().plusDays(2))
                 .withDepartureDate(LocalDate.now().plusDays(4))
@@ -115,7 +115,7 @@ class BookingEngineTest {
                 .build();
 
         Booking booking3 = Booking.builder()
-                .hotelID(1)
+                .withHotelId(1)
                 .withRoom(101)
                 .withArrivalDate(LocalDate.now().plusDays(4))
                 .withDepartureDate(LocalDate.now().plusDays(6))
@@ -127,9 +127,9 @@ class BookingEngineTest {
         bookingEngine.makeABooking(booking3);
 
         assertEquals(3, bookingEngine.listAllBookedRooms().size());
-        assertEquals("Abbe", bookingEngine.listAllBookedRooms().get(0).getGuest());
-        assertEquals("Edward", bookingEngine.listAllBookedRooms().get(1).getGuest());
-        assertEquals("Anders", bookingEngine.listAllBookedRooms().get(2).getGuest());
+        assertEquals("Abbe", bookingEngine.listAllBookedRooms().get(0).getGuest().getName());
+        assertEquals("Edward", bookingEngine.listAllBookedRooms().get(1).getGuest().getName());
+        assertEquals("Anders", bookingEngine.listAllBookedRooms().get(2).getGuest().getName());
 
     }
 
@@ -137,7 +137,7 @@ class BookingEngineTest {
     void youShouldNotBeAbleTooBookARoomInTheMiddleOfABookedDate() {
 
         Booking booking1 = Booking.builder()
-                .hotelID(1)
+                .withHotelId(1)
                 .withRoom(101)
                 .withArrivalDate(LocalDate.now().plusDays(2))
                 .withDepartureDate(LocalDate.now().plusDays(4))
@@ -145,7 +145,7 @@ class BookingEngineTest {
                 .build();
 
         Booking booking2 = Booking.builder()
-                .hotelID(1)
+                .withHotelId(1)
                 .withRoom(101)
                 .withArrivalDate(LocalDate.now())
                 .withDepartureDate(LocalDate.now().plusDays(6))
@@ -153,14 +153,14 @@ class BookingEngineTest {
                 .build();
 
         bookingEngine.makeABooking(booking1);
-        assertThrows(RuntimeException.class,()->bookingEngine.makeABooking(booking2));
+        assertThrows(RuntimeException.class, () -> bookingEngine.makeABooking(booking2));
 
     }
 
     @Test
     void youShouldNotBeAbleTooBookARoomBetweenBookedDates() {
         Booking booking1 = Booking.builder()
-                .hotelID(1)
+                .withHotelId(1)
                 .withRoom(101)
                 .withArrivalDate(LocalDate.now())
                 .withDepartureDate(LocalDate.now().plusDays(4))
@@ -168,7 +168,7 @@ class BookingEngineTest {
                 .build();
 
         Booking booking2 = Booking.builder()
-                .hotelID(1)
+                .withHotelId(1)
                 .withRoom(101)
                 .withArrivalDate(LocalDate.now().plusDays(1))
                 .withDepartureDate(LocalDate.now().plusDays(2))
@@ -176,15 +176,15 @@ class BookingEngineTest {
                 .build();
 
         bookingEngine.makeABooking(booking1);
-        assertThrows(RuntimeException.class,()->bookingEngine.makeABooking(booking2));
-        assertEquals(1,bookingEngine.listAllBookedRooms().size());
-        assertEquals("Abbe",bookingEngine.listAllBookedRooms().get(0).getGuest());
+        assertThrows(RuntimeException.class, () -> bookingEngine.makeABooking(booking2));
+        assertEquals(1, bookingEngine.listAllBookedRooms().size());
+        assertEquals("Abbe", bookingEngine.listAllBookedRooms().get(0).getGuest().getName());
     }
 
     @Test
     void youShouldBeAbleTooBookMultipleRoomsOnTheSameDate() {
         Booking booking1 = Booking.builder()
-                .hotelID(2)
+                .withHotelId(2)
                 .withRoom(101)
                 .withArrivalDate(LocalDate.now())
                 .withDepartureDate(LocalDate.now().plusDays(2))
@@ -192,7 +192,7 @@ class BookingEngineTest {
                 .build();
 
         Booking booking2 = Booking.builder()
-                .hotelID(2)
+                .withHotelId(2)
                 .withRoom(102)
                 .withArrivalDate(LocalDate.now())
                 .withDepartureDate(LocalDate.now().plusDays(2))
@@ -200,7 +200,7 @@ class BookingEngineTest {
                 .build();
 
         Booking booking3 = Booking.builder()
-                .hotelID(2)
+                .withHotelId(2)
                 .withRoom(103)
                 .withArrivalDate(LocalDate.now())
                 .withDepartureDate(LocalDate.now().plusDays(2))
@@ -217,7 +217,7 @@ class BookingEngineTest {
     void youShouldNotBeAbleToBookBetweenABooking() {
 
         Booking booking1 = Booking.builder()
-                .hotelID(1)
+                .withHotelId(1)
                 .withRoom(101)
                 .withArrivalDate(LocalDate.now().plusDays(2))
                 .withDepartureDate(LocalDate.now().plusDays(4))
@@ -225,7 +225,7 @@ class BookingEngineTest {
                 .build();
 
         Booking booking2 = Booking.builder()
-                .hotelID(1)
+                .withHotelId(1)
                 .withRoom(101)
                 .withArrivalDate(LocalDate.now())
                 .withDepartureDate(LocalDate.now().plusDays(3))
@@ -233,9 +233,12 @@ class BookingEngineTest {
                 .build();
 
         bookingEngine.makeABooking(booking1);
-        assertThrows(RuntimeException.class,()->bookingEngine.makeABooking(booking2));
-        assertEquals(1,bookingEngine.listAllBookedRooms().size());
-        assertEquals("Abbe",bookingEngine.listAllBookedRooms().get(0).getGuest());
+
+        assertThrows(RuntimeException.class, () -> bookingEngine.makeABooking(booking2));
+
+        assertEquals(1, bookingEngine.listAllBookedRooms().size());
+
+        assertEquals("Abbe", bookingEngine.listAllBookedRooms().get(0).getGuest().getName());
     }
 
 
@@ -247,11 +250,11 @@ class BookingEngineTest {
     @Test
     void youShouldBookARoom() {
         Booking booking = Booking.builder()
-                .hotelID(1)
+                .withHotelId(1)
                 .withRoom(102)
-                .withGuest("Abbe")
                 .withArrivalDate(LocalDate.now())
                 .withDepartureDate(LocalDate.now().plusDays(2))
+                .withGuest("Abbe")
                 .build();
 
         bookingEngine.makeABooking(booking);
@@ -270,25 +273,26 @@ class BookingEngineTest {
     @Test
     void youShouldBeAbleToBookADifferentHotel() {
         Booking booking1 = Booking.builder()
-                .hotelID(1)
+                .withHotelId(1)
                 .withRoom(101)
-                .withGuest("Abbe")
                 .withArrivalDate(LocalDate.now())
                 .withDepartureDate(LocalDate.now().plusDays(2))
+                .withGuest("Abbe")
                 .build();
 
         Booking booking2 = Booking.builder()
-                .hotelID(2)
+                .withHotelId(2)
                 .withRoom(101)
-                .withGuest("Edward")
                 .withArrivalDate(LocalDate.now())
                 .withDepartureDate(LocalDate.now().plusDays(2))
+                .withGuest("Edward")
                 .build();
 
         bookingEngine.makeABooking(booking1);
         bookingEngine.makeABooking(booking2);
 
         assertEquals(2, bookingEngine.listAllBookedRooms().size());
+
     }
 
 }

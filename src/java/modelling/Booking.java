@@ -1,80 +1,102 @@
 package modelling;
 
 import java.time.LocalDate;
-import static org.apache.commons.lang3.Validate.isTrue;
-import static org.apache.commons.lang3.Validate.notNull;
 
 public class Booking {
 
+    private final Id hotelId;
     private final Room room;
-    private final Guest guest;
     private final LocalDate arrivalDate;
     private final LocalDate departureDate;
-    private final Id hotelID;
+    private final Guest guest;
 
-    private Booking(Builder builder) {
-        isTrue(builder.room.getRoomNumber()>0);
-        notNull(builder.guest);
-        isTrue(builder.guest.getName().matches("^[a-zA-Z]+"));
-
-        this.room = builder.room;
-        this.guest = builder.guest;
-        this.arrivalDate = builder.arrivalDate;
-        this.departureDate = builder.departureDate;
-        this.hotelID = builder.hotelID;
-    }
-
-    public static Builder builder(){
+    public static hotelStep builder() {
         return new Builder();
     }
 
-    public static class Builder {
+    public interface hotelStep {
+        ToRoomStep withHotelId(int hotelId);
+    }
 
-        //ToDO: Step-Builder-pattern, Link: https://svlada.com/step-builder-pattern/
+    public interface ToRoomStep {
+        ToArrivalDate withRoom(int room);
+    }
 
+    public interface ToArrivalDate {
+        ToDepartureDate withArrivalDate(LocalDate arrivalDate);
+    }
+
+    public interface ToDepartureDate {
+        ToGuestName withDepartureDate(LocalDate departureDate);
+    }
+
+    public interface ToGuestName {
+        Build withGuest(String guest);
+    }
+
+    public interface Build {
+        Booking build();
+    }
+
+    public static class Builder implements hotelStep, ToRoomStep, ToArrivalDate, ToDepartureDate, ToGuestName, Build {
+        private Id hotelId;
         private Room room;
-        private Guest guest;
         private LocalDate arrivalDate;
         private LocalDate departureDate;
-        private Id hotelID;
+        private Guest guest;
 
-        public Builder hotelID(final int hotelID){
-            this.hotelID = Id.of(hotelID);
+        @Override
+        public Booking build() {
+            return new Booking(this);
+        }
+
+        @Override
+        public ToRoomStep withHotelId(int hotelId) {
+            this.hotelId = Id.of(hotelId);
             return this;
         }
 
-        public Builder withRoom(final int room) {
+        @Override
+        public ToArrivalDate withRoom(int room) {
             this.room = Room.of(room);
             return this;
         }
 
-        public Builder withGuest(final String guest) {
-            this.guest = Guest.of(guest);
-            return this;
-        }
-
-        public Builder withArrivalDate(LocalDate arrivalDate) {
+        @Override
+        public ToDepartureDate withArrivalDate(LocalDate arrivalDate) {
             this.arrivalDate = arrivalDate;
             return this;
         }
 
-        public Builder withDepartureDate(LocalDate departureDate) {
+        @Override
+        public ToGuestName withDepartureDate(LocalDate departureDate) {
             this.departureDate = departureDate;
             return this;
         }
 
-        public Booking build(){
-            return new Booking(this);
+        @Override
+        public Build withGuest(String guest) {
+            this.guest = Guest.of(guest);
+            return this;
         }
 
     }
 
-    public int getRoom() {
-        return room.getRoomNumber();
+    private Booking(Builder builder) {
+        this.hotelId = builder.hotelId;
+        this.room = builder.room;
+        this.arrivalDate = builder.arrivalDate;
+        this.departureDate = builder.departureDate;
+        this.guest = builder.guest;
     }
 
-    public String getGuest() {
-        return guest.getName();
+
+    public Id getHotelId() {
+        return hotelId;
+    }
+
+    public Room getRoom() {
+        return room;
     }
 
     public LocalDate getArrivalDate() {
@@ -85,7 +107,8 @@ public class Booking {
         return departureDate;
     }
 
-    public Id getHotelID() {
-        return hotelID;
+    public Guest getGuest() {
+        return guest;
     }
+
 }

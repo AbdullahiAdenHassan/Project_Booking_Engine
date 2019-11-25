@@ -42,8 +42,8 @@ public class BookingEngine {
 
     private List<Booking> getSortedBookedDates(Booking booking) {
         return reservations.stream()
-                .filter(hotelId -> hotelId.getHotelID().getId() == booking.getHotelID().getId())
-                .filter(roomNumber -> booking.getRoom() == roomNumber.getRoom())
+                .filter(hotelId -> hotelId.getHotelId().getId() == booking.getHotelId().getId())
+                .filter(roomNumber -> booking.getRoom().getRoomNumber() == roomNumber.getRoom().getRoomNumber())
                 .sorted(Comparator.comparing(Booking::getArrivalDate))
                 .collect(Collectors.toList());
     }
@@ -79,10 +79,10 @@ public class BookingEngine {
 
     private boolean isHotelIdAndRoomNumberAcceptable(Booking booking) {
         return inventory
-                .getHotel(booking.getHotelID().getId())
+                .getHotel(booking.getHotelId().getId())
                 .getRoom()
                 .stream()
-                .anyMatch(room -> room.getRoomNumber() == booking.getRoom());
+                .anyMatch(room -> room.getRoomNumber() == booking.getRoom().getRoomNumber());
     }
 
     private boolean isThatDateAcceptable(Booking booking) {
