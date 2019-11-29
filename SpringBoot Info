@@ -1,0 +1,57 @@
+Setup steps
+1.Spring Boot Starter parent using:
+ <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.1.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+ </parent>
+
+2. Version of java using:
+	<properties>
+		<java.version>11</java.version>
+	</properties>
+
+3. Spring Boot Starter Web for application
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+4. Spring Boot Test web for application
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+5.Spring Boot plugin
+ <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+6. Create class called DemoApplication or Application class:
+ @SpringBootApplication
+ public class DemoApplication {
+     public static void main(String[] args) {
+         SpringApplication.run(DemoApplication.class, args);
+     }
+ }
+
+Tips: You must have the Application class in a package to use Spring Boot correct!
+    A class that does not have any package declaration is considered as a default package.
+    Note that generally a default package declaration is not recommended.
+
+    Spring Boot will cause issues such as malfunctioning of Auto Configuration or Component Scan, when you use default package.
+    Note − Java's recommended naming convention for package declaration is reversed domain name. For example − com.tutorialspoint.com.playground.myproject
