@@ -1,0 +1,7 @@
+1. mvn clean package works only if directory structure is src.main.java
+ and src.test.java else maven cant find classes, files....
+
+ 2. You can use
+ <packaging>jar</packaging>
+ <name>Booking Engine</name>
+ <description>Spring boot reservation engine</description>

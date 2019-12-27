@@ -1,5 +1,5 @@
 # Project_Booking_Engine
-Building a booking engine that will include all functionality of a hotel services.
+Building a reservation engine that will include all functionality of a hotel services.
 
 ### Requirements
 1. List Rooms.
@@ -12,7 +12,7 @@ Building a booking engine that will include all functionality of a hotel service
 write test for invalid bookings
 OBS! for same room
 
-given booking for 10-12    adding a booking 11-13 fails
-given booking for 10-12    adding a booking 8-11 fails
-given booking for 10-12    adding a booking 8-14 fails
-given booking for 10-14    adding a booking 11-12 fails
+given reservation for 10-12    adding a reservation 11-13 fails
+given reservation for 10-12    adding a reservation 8-11 fails
+given reservation for 10-12    adding a reservation 8-14 fails
+given reservation for 10-14    adding a reservation 11-12 fails
