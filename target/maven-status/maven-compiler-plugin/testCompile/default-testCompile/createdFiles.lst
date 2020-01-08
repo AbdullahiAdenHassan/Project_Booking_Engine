@@ -1,2 +1,5 @@
-com\booking\project\integrationTest\ApplicationTest.class
-com\booking\project\unitTest\ReservationEngineTest.class
+com\booking\project\oldUnitTest\ReservationEngineTest.class
+com\booking\project\bookingsystem\reservation\reservationservice\unittest\ReservationServiceLogicTest.class
+com\booking\project\bookingsystem\reservation\reservationservice\unittest\ReservationServiceMockTest.class
+com\booking\project\bookingsystem\reservation\ReservationControllerTest.class
+com\booking\project\bookingsystem\reservation\SampleTomcatDeployApplicationIT.class

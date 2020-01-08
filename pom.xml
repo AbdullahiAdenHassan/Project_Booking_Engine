@@ -8,7 +8,7 @@
     <artifactId>Project_Booking_Engine</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
-    <name>Booking Engine</name>
+    <name>Booking_Engine</name>
     <description>Booking system</description>
 
     <properties>
@@ -63,6 +63,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <version>2.2.1.RELEASE</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -78,6 +79,14 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
+        </dependency>
+
+
     </dependencies>
 
     <build>
@@ -87,7 +96,7 @@
             <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.booking.project.Application</mainClass>
+                    <mainClass>com.booking.project.BookingEngineApp</mainClass>
                 </configuration>
                 <executions>
                     <execution>

@@ -1,2 +1,5 @@
-C:\JavaProjects\Project_Booking_Engine\src\test\java\com\booking\project\unitTest\ReservationEngineTest.java
-C:\JavaProjects\Project_Booking_Engine\src\test\java\com\booking\project\integrationTest\ApplicationTest.java
+C:\JavaProjects\Project_Booking_Engine\src\test\java\com\booking\project\bookingsystem\reservation\ReservationControllerTest.java
+C:\JavaProjects\Project_Booking_Engine\src\test\java\com\booking\project\bookingsystem\reservation\reservationservice\unittest\ReservationServiceMockTest.java
+C:\JavaProjects\Project_Booking_Engine\src\test\java\com\booking\project\oldUnitTest\ReservationEngineTest.java
+C:\JavaProjects\Project_Booking_Engine\src\test\java\com\booking\project\bookingsystem\reservation\reservationservice\unittest\ReservationServiceLogicTest.java
+C:\JavaProjects\Project_Booking_Engine\src\test\java\com\booking\project\bookingsystem\reservation\SampleTomcatDeployApplicationIT.java
