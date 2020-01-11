@@ -60,22 +60,22 @@ public class ReservationServiceLogicTest {
                 LocalDate.now().plusDays(1)
         );
 
-        reservationServiceMock.addNewReservation(reservation1.getReservationId(), reservation1);
-        verify(reservationDataAccessService).insertReservation(reservation1.getReservationId(), reservation1);
+        reservationServiceMock.addNewReservation(reservation1.getReservation_id(), reservation1);
+        verify(reservationDataAccessService).insertReservation(reservation1.getReservation_id(), reservation1);
 
         Mockito.when(reservationDataAccessService.selectAllReservations())
                 .thenReturn(constructReservationList(reservation1));
 
 
-        reservationServiceMock.addNewReservation(reservation2.getReservationId(), reservation2);
-        Mockito.when(reservationServiceMock.addNewReservation(reservation2.getReservationId(), reservation2))
+        reservationServiceMock.addNewReservation(reservation2.getReservation_id(), reservation2);
+        Mockito.when(reservationServiceMock.addNewReservation(reservation2.getReservation_id(), reservation2))
                 .thenThrow(ApiRequestException.class);
 
         reservationList = reservationDataAccessService.selectAllReservations();
 
         assertEquals(1, reservationList.size());
         assertThrows(ApiRequestException.class, () ->
-                reservationServiceMock.addNewReservation(reservation2.getReservationId(), reservation2));
+                reservationServiceMock.addNewReservation(reservation2.getReservation_id(), reservation2));
 
     }
 
@@ -94,8 +94,8 @@ public class ReservationServiceLogicTest {
     private boolean verifyReservation(Reservation reservation) {
 
         boolean sameHotelRoom = reservationDataAccessService.selectAllReservations().stream()
-                .anyMatch(reservationList -> reservationList.getHotelChain().equals(reservation.getHotelChain())
-                        && reservationList.getHotelRoom().equals(reservation.getHotelRoom()));
+                .anyMatch(reservationList -> reservationList.getHotel_chain().equals(reservation.getHotel_chain())
+                        && reservationList.getHotel_room().equals(reservation.getHotel_room()));
 
 
 
@@ -107,14 +107,14 @@ public class ReservationServiceLogicTest {
         List<Reservation> allReservations = Arrays
                 .stream(reservations)
                 .map(reservation -> {
-                    UUID newReservationId = Optional.ofNullable(reservation.getReservationId()).orElse(UUID.randomUUID());
+                    UUID newReservationId = Optional.ofNullable(reservation.getReservation_id()).orElse(UUID.randomUUID());
                     return new Reservation(newReservationId,
-                            reservation.getHotelChain(),
-                            reservation.getHotelRoom().getRoom(),
+                            reservation.getHotel_chain(),
+                            reservation.getHotel_room().getRoom(),
                             reservation.getGuest().getFirst_name(),
                             reservation.getGuest().getLast_name(),
-                            reservation.getArrivalDate(),
-                            reservation.getDepartureDate());
+                            reservation.getArrival_date(),
+                            reservation.getDeparture_date());
                 })
                 .collect(Collectors.toList());
 

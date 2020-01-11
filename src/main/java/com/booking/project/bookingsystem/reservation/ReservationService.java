@@ -25,7 +25,7 @@ public class ReservationService {
 
     public int addNewReservation(Reservation reservation) {
 
-        return addNewReservation(null, reservation);
+        return addNewReservation(reservation.getReservation_id(), reservation);
     }
 
     public int addNewReservation(UUID reservation_id, Reservation reservation) {
@@ -33,13 +33,8 @@ public class ReservationService {
         UUID newReservationId = Optional.ofNullable(reservation_id)
                 .orElse(UUID.randomUUID());
 
-       /* if (reservationDataAccessService.isReservationDateTaken(reservation.getArrivalDate(),
-                reservation.getDepartureDate())) {
-            throw new ApiRequestException(reservation.getDate() + " is taken");
-        }*/
-
         if (reservationDataAccessService.isThatReservationDateForThatRoomTaken(reservation)) {
-            throw new ApiRequestException("Room "+reservation.getHotelRoom().getRoom()+" In "+reservation.getHotelChain()+" between "+ reservation.getDate() + " is taken");
+            throw new ApiRequestException("Room "+reservation.getHotel_room().getRoom()+" In "+reservation.getHotel_chain()+" between "+ reservation.getDate() + " is taken");
         }
 
         return reservationDataAccessService.insertReservation(newReservationId, reservation);
@@ -55,11 +50,11 @@ public class ReservationService {
 
     public void updateReservation(UUID reservation_id, Reservation reservation) {
 
-        Optional.ofNullable(reservation.getHotelChain())
+        Optional.ofNullable(reservation.getHotel_chain())
                 .filter(hotel_chain -> !StringUtils.isEmpty(hotel_chain))
                 .ifPresent(hotel_chain -> reservationDataAccessService.updateHotelChain(reservation_id, hotel_chain));
 
-        Optional.of(reservation.getHotelRoom().getRoom())
+        Optional.of(reservation.getHotel_room().getRoom())
                 .ifPresent(room_number -> reservationDataAccessService.updateHotelRoom(reservation_id, room_number));
 
         Optional.ofNullable(reservation.getGuest().getFirst_name())
@@ -72,11 +67,11 @@ public class ReservationService {
                 .map(StringUtils::capitalize)
                 .ifPresent(last_name -> reservationDataAccessService.updateLastName(reservation_id, last_name));
 
-        Optional.ofNullable(reservation.getArrivalDate())
+        Optional.ofNullable(reservation.getArrival_date())
                 .filter(arrival_date -> arrival_date.isEqual(LocalDate.now()) || arrival_date.isAfter(LocalDate.now()))
                 .ifPresent(arrival_date -> reservationDataAccessService.updateArrivalDate(reservation_id, arrival_date));
 
-        Optional.ofNullable(reservation.getDepartureDate())
+        Optional.ofNullable(reservation.getDeparture_date())
                 .filter(departure_date -> departure_date.isEqual(LocalDate.now()) || departure_date.isAfter(LocalDate.now()))
                 .ifPresent(departure_date -> reservationDataAccessService.updateDepartureDate(reservation_id, departure_date));
 
@@ -90,5 +85,9 @@ public class ReservationService {
 
     List<Reservation> getSortedReservation(HotelChain hotel_chain) {
         return reservationDataAccessService.getSortedReservationByHotel(hotel_chain);
+    }
+
+    public void deleteAllReservation() {
+        reservationDataAccessService.deleteAllReservation();
     }
 }

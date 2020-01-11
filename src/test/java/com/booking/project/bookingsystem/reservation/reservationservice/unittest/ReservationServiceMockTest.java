@@ -89,18 +89,18 @@ public class ReservationServiceMockTest {
         List<Reservation> reservationList = constructReservationList(reservation1, reservation2);
         when(reservationDataAccessService.selectAllReservations()).thenReturn(reservationList);
 
-        reservationServiceMock.addNewReservation(reservation1.getReservationId(), reservation1);
-        verify(reservationDataAccessService).insertReservation(reservation1.getReservationId(),reservation1);
+        reservationServiceMock.addNewReservation(reservation1.getReservation_id(), reservation1);
+        verify(reservationDataAccessService).insertReservation(reservation1.getReservation_id(),reservation1);
 
-        reservationServiceMock.addNewReservation(reservation2.getReservationId(), reservation2);
-        verify(reservationDataAccessService).insertReservation(reservation2.getReservationId(),reservation1);
+        reservationServiceMock.addNewReservation(reservation2.getReservation_id(), reservation2);
+        verify(reservationDataAccessService).insertReservation(reservation2.getReservation_id(),reservation1);
     }
 
     private void whenReservationHasBeenUpdateById() {
         List<Reservation> collect = reservationDataAccessService
                 .selectAllReservations()
                 .stream()
-                .filter(reservation -> reservation.getReservationId().compareTo(UUID.fromString("46693067-8e23-4d07-a67a-cfa9f252f0bc")) != 0)
+                .filter(reservation -> reservation.getReservation_id().compareTo(UUID.fromString("46693067-8e23-4d07-a67a-cfa9f252f0bc")) != 0)
                 .collect(Collectors.toList());
 
         collect.add(new Reservation(
@@ -114,12 +114,12 @@ public class ReservationServiceMockTest {
 
         allReservations = collect;
         verify(reservationDataAccessService, times(1)).selectAllReservations();
-        reservationServiceMock.updateReservation(allReservations.get(1).getReservationId(), allReservations.get(1));
+        reservationServiceMock.updateReservation(allReservations.get(1).getReservation_id(), allReservations.get(1));
     }
 
     private void thenVerifyThatReservationHasBeenUpdated() {
         assertEquals(2, allReservations.size());
-        assertEquals("46693067-8e23-4d07-a67a-cfa9f252f0bc", allReservations.get(1).getReservationId().toString());
+        assertEquals("46693067-8e23-4d07-a67a-cfa9f252f0bc", allReservations.get(1).getReservation_id().toString());
         assertEquals("Adam", allReservations.get(1).getGuest().getFirst_name());
         assertEquals("Svensson", allReservations.get(1).getGuest().getLast_name());
         allReservations.clear();
@@ -158,17 +158,17 @@ public class ReservationServiceMockTest {
 
         List<Reservation> reservationList = constructReservationList(reservation1, reservation2, reservation3);
         Mockito.when(reservationDataAccessService.selectAllReservations()).thenReturn(reservationList);
-        reservationServiceMock.addNewReservation(reservation1.getReservationId(), reservation1);
-        reservationServiceMock.addNewReservation(reservation2.getReservationId(), reservation2);
-        reservationServiceMock.addNewReservation(reservation3.getReservationId(), reservation3);
-        reservationServiceMock.deleteReservation(reservation1.getReservationId());
+        reservationServiceMock.addNewReservation(reservation1.getReservation_id(), reservation1);
+        reservationServiceMock.addNewReservation(reservation2.getReservation_id(), reservation2);
+        reservationServiceMock.addNewReservation(reservation3.getReservation_id(), reservation3);
+        reservationServiceMock.deleteReservation(reservation1.getReservation_id());
     }
 
     private void whenOneReservationIsDeletedById() {
         allReservations = reservationDataAccessService
                 .selectAllReservations()
                 .stream()
-                .filter(reservation -> !reservation.getReservationId().equals(UUID.fromString("46693067-8e23-4d07-a67a-cfa9f252f0bb")))
+                .filter(reservation -> !reservation.getReservation_id().equals(UUID.fromString("46693067-8e23-4d07-a67a-cfa9f252f0bb")))
                 .collect(Collectors.toList());
 
         verify(reservationDataAccessService, times(1)).selectAllReservations();
@@ -176,8 +176,8 @@ public class ReservationServiceMockTest {
 
     private void thenVerifyThatReservationDoesNotExit() {
         assertEquals(2, allReservations.size());
-        assertNotEquals("46693067-8e23-4d07-a67a-cfa9f252f0bb", allReservations.get(0).getReservationId());
-        assertNotEquals("46693067-8e23-4d07-a67a-cfa9f252f0bb", allReservations.get(1).getReservationId());
+        assertNotEquals("46693067-8e23-4d07-a67a-cfa9f252f0bb", allReservations.get(0).getReservation_id());
+        assertNotEquals("46693067-8e23-4d07-a67a-cfa9f252f0bb", allReservations.get(1).getReservation_id());
         allReservations.clear();
     }
 
@@ -204,10 +204,10 @@ public class ReservationServiceMockTest {
 
         List<Reservation> reservationList = constructReservationList(reservation1, reservation2);
         Mockito.when(reservationDataAccessService.selectAllReservations()).thenReturn(reservationList);
-        reservationServiceMock.addNewReservation(reservation1.getReservationId(), reservation1);
-        verify(reservationDataAccessService).insertReservation(reservation1.getReservationId(),reservation1);
-        reservationServiceMock.addNewReservation(reservation2.getReservationId(), reservation2);
-        verify(reservationDataAccessService).insertReservation(reservation2.getReservationId(),reservation2);
+        reservationServiceMock.addNewReservation(reservation1.getReservation_id(), reservation1);
+        verify(reservationDataAccessService).insertReservation(reservation1.getReservation_id(),reservation1);
+        reservationServiceMock.addNewReservation(reservation2.getReservation_id(), reservation2);
+        verify(reservationDataAccessService).insertReservation(reservation2.getReservation_id(),reservation2);
     }
 
     private void whenTwoReservationsIsAdded() {
@@ -252,30 +252,30 @@ public class ReservationServiceMockTest {
     private void whenFetchingOneReservationById() {
         allReservations = reservationDataAccessService.selectAllReservations()
                 .stream()
-                .filter(reservation -> reservation.getReservationId().equals(UUID.fromString("46693067-8e23-4d07-a67a-cfa9f252f0bb")))
+                .filter(reservation -> reservation.getReservation_id().equals(UUID.fromString("46693067-8e23-4d07-a67a-cfa9f252f0bb")))
                 .collect(Collectors.toList());
 
         verify(reservationDataAccessService,times(1)).selectAllReservations();
-        reservationServiceMock.getReservation(allReservations.get(0).getReservationId());
+        reservationServiceMock.getReservation(allReservations.get(0).getReservation_id());
     }
 
     private void thenVerifyThatReservationHasBeenRetrieved() {
         assertEquals(1,allReservations.size());
-        assertEquals("46693067-8e23-4d07-a67a-cfa9f252f0bb",allReservations.get(0).getReservationId().toString());
+        assertEquals("46693067-8e23-4d07-a67a-cfa9f252f0bb",allReservations.get(0).getReservation_id().toString());
     }
 
     private List<Reservation> constructReservationList(Reservation... reservations) {
         List<Reservation> allReservations = Arrays
                 .stream(reservations)
                 .map(reservation -> {
-                    UUID newReservationId = Optional.ofNullable(reservation.getReservationId()).orElse(UUID.randomUUID());
+                    UUID newReservationId = Optional.ofNullable(reservation.getReservation_id()).orElse(UUID.randomUUID());
                     return new Reservation(newReservationId,
-                            reservation.getHotelChain(),
-                            reservation.getHotelRoom().getRoom(),
+                            reservation.getHotel_chain(),
+                            reservation.getHotel_room().getRoom(),
                             reservation.getGuest().getFirst_name(),
                             reservation.getGuest().getLast_name(),
-                            reservation.getArrivalDate(),
-                            reservation.getDepartureDate());
+                            reservation.getArrival_date(),
+                            reservation.getDeparture_date());
                 })
                 .collect(Collectors.toList());
 

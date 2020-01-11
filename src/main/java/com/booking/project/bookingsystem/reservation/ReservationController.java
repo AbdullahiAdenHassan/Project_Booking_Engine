@@ -20,22 +20,22 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-    @GetMapping(path = "/allReservation")
+    @GetMapping(path = "/getAllReservation", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Reservation> getAllReservations() {
         return reservationService.getAllReservations();
     }
 
-    @GetMapping(path = "/{reservation_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Reservation getReservation(@PathVariable ("reservation_id") UUID reservation_id){
+    @GetMapping(path = "/getAllReservation/{reservation_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Reservation getReservation(@PathVariable("reservation_id") UUID reservation_id) {
         return reservationService.getReservation(reservation_id);
     }
 
     @GetMapping(path = "/reservation/{hotel_chain}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Reservation> getSortedReservation(@PathVariable ("hotel_chain") HotelChain hotel_chain){
+    public List<Reservation> getSortedReservation(@PathVariable("hotel_chain") HotelChain hotel_chain) {
         return reservationService.getSortedReservation(hotel_chain);
     }
 
-    @PostMapping(path = "/addReservation")
+    @PostMapping(path = "/addReservation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE) // both xml och json later!
     public void addNewReservation(@RequestBody @Valid Reservation reservation) {
         reservationService.addNewReservation(reservation);
     }
@@ -48,6 +48,10 @@ public class ReservationController {
     @DeleteMapping(path = "/{reservation_id}")
     public void deleteReservation(@PathVariable("reservation_id") UUID reservation_id) {
         reservationService.deleteReservation(reservation_id);
+    }
+    @DeleteMapping(path = "/deleteAll")
+    public void deleteAllReservation(){
+        reservationService.deleteAllReservation();
     }
 
 

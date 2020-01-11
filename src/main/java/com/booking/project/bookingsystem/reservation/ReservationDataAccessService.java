@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository("bookingsystem")
@@ -36,12 +35,12 @@ public class ReservationDataAccessService {
         return jdbcTemplate.update(
                 sql,
                 reservation_id,
-                reservation.getHotelChain().name(),
-                reservation.getHotelRoom().getRoom(),
+                reservation.getHotel_chain().name(),
+                reservation.getHotel_room().getRoom(),
                 reservation.getGuest().getFirst_name(),
                 reservation.getGuest().getLast_name(),
-                reservation.getArrivalDate(),
-                reservation.getDepartureDate()
+                reservation.getArrival_date(),
+                reservation.getDeparture_date()
         );
     }
 
@@ -67,8 +66,8 @@ public class ReservationDataAccessService {
             UUID reservationId = UUID.fromString(reservationIdStr);
 
             HotelChain hotel_chain = HotelChain.valueOf(resultSet.getString("hotel_chain"));
-            String first_name = resultSet.getString("first_name").toUpperCase();
-            String last_name = resultSet.getString("last_name").toUpperCase();
+            String first_name = resultSet.getString("first_name");
+            String last_name = resultSet.getString("last_name");
 
             String hotel_roomStr = resultSet.getString("hotel_room");
             int hotel_room = Integer.parseInt(hotel_roomStr);
@@ -117,67 +116,37 @@ public class ReservationDataAccessService {
     }
 
     @SuppressWarnings("ConstantCondtitions")
-    public boolean isReservationDateTaken(LocalDate arrivalDate, LocalDate departureDate) {
-
-        String sql1 = "" +
-                "SELECT EXISTS ( " +
-                " SELECT 1 " +
-                " FROM reservation " +
-                " WHERE arrival_date = ?" +
-                ")";
-        boolean arrival_date = Optional.ofNullable(jdbcTemplate.queryForObject(
-                sql1, new Object[]{arrivalDate},
-                (resultSet, i) -> resultSet.getBoolean(1)))
-                .orElseThrow();
-
-        String sql2 = "" +
-                "SELECT EXISTS ( " +
-                " SELECT 1 " +
-                " FROM reservation " +
-                " WHERE departure_date = ?" +
-                ")";
-        boolean departure_date = Optional.ofNullable(jdbcTemplate.queryForObject(
-                sql1, new Object[]{departureDate},
-                (resultSet, i) -> resultSet.getBoolean(1)))
-                .orElseThrow();
-
-        return arrival_date || departure_date;
-    }
-
-    @SuppressWarnings("ConstantCondtitions")
     public boolean isThatReservationDateForThatRoomTaken(Reservation reservation) {
 
-        List<Reservation> sortedReservationByHotelName = getSortedReservationByHotel(reservation.getHotelChain());
+        List<Reservation> sortedReservationByHotelName = getSortedReservationByHotel(reservation.getHotel_chain());
 
         for (Reservation reservations : sortedReservationByHotelName) {
 
-            if (reservation.getHotelRoom().getRoom() == reservations.getHotelRoom().getRoom()) {
-                if (reservation.getArrivalDate().isEqual(reservations.getArrivalDate())
-                        && reservation.getDepartureDate().isEqual(reservations.getDepartureDate()))
+            if (reservation.getHotel_room().getRoom() == reservations.getHotel_room().getRoom()) {
+                if (reservation.getArrival_date().isEqual(reservations.getArrival_date())
+                        && reservation.getDeparture_date().isEqual(reservations.getDeparture_date()))
                     return true;
 
-                if (reservation.getArrivalDate().isAfter(reservations.getArrivalDate())
-                        && reservation.getDepartureDate().isBefore(reservations.getDepartureDate()))
+                if (reservation.getArrival_date().isAfter(reservations.getArrival_date())
+                        && reservation.getDeparture_date().isBefore(reservations.getDeparture_date()))
                     return true;
 
-                if (reservation.getArrivalDate().isBefore(reservations.getArrivalDate())
-                        && (reservation.getDepartureDate().isAfter(reservations.getDepartureDate())
-                        || reservation.getDepartureDate().isEqual(reservations.getDepartureDate())))
+                if (reservation.getArrival_date().isBefore(reservations.getArrival_date())
+                        && (reservation.getDeparture_date().isAfter(reservations.getDeparture_date())
+                        || reservation.getDeparture_date().isEqual(reservations.getDeparture_date())))
                     return true;
 
-                if (reservation.getArrivalDate().isAfter(reservations.getArrivalDate())
-                        && reservation.getArrivalDate().isBefore(reservations.getDepartureDate()))
+                if (reservation.getArrival_date().isAfter(reservations.getArrival_date())
+                        && reservation.getArrival_date().isBefore(reservations.getDeparture_date()))
                     return true;
 
-                if (reservation.getDepartureDate().isAfter(reservations.getArrivalDate())
-                        && reservation.getDepartureDate().isBefore(reservations.getDepartureDate()))
+                if (reservation.getDeparture_date().isAfter(reservations.getArrival_date())
+                        && reservation.getDeparture_date().isBefore(reservations.getDeparture_date()))
                     return true;
             }
-
         }
 
         return false;
-
     }
 
     public void deleteReservationById(UUID reservation_id) {
@@ -242,7 +211,6 @@ public class ReservationDataAccessService {
         String sql = "" +
                 "DELETE FROM reservation " +
                 "WHERE departure_date < NOW()";
-
         jdbcTemplate.update(sql);
     }
 
@@ -271,5 +239,11 @@ public class ReservationDataAccessService {
                 LocalDate.parse(resultSet.getString("arrival_date")),
                 LocalDate.parse(resultSet.getString("departure_date"))
         ));
+    }
+
+    public void deleteAllReservation() {
+        String sql =""+
+                " DELETE FROM reservation ";
+        jdbcTemplate.update(sql);
     }
 }

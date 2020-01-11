@@ -7,50 +7,50 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Reservation {
-    private final UUID reservationId;
-    private final Room hotelRoom;
-    private final LocalDate arrivalDate;
-    private final LocalDate departureDate;
+    private final UUID reservation_id;
+    private final Room hotel_room;
+    private final LocalDate arrival_date;
+    private final LocalDate departure_date;
     private final Guest guest;
-    private final HotelChain hotelChain;
+    private final HotelChain hotel_chain;
 
     public Reservation(@JsonProperty("reservation_id") UUID id,
                        @JsonProperty("hotel_chain") HotelChain hotel_chain,
-                       @JsonProperty("hotel_room") int hotelRoom,
+                       @JsonProperty("hotel_room") int hotel_room,
                        @JsonProperty("first_name") String first_name,
                        @JsonProperty("last_name") String last_name,
-                       @JsonProperty("arrival_date") LocalDate arrivalDate,
-                       @JsonProperty("departure_date") LocalDate departureDate) {
-        this.reservationId = id;
-        this.hotelRoom = Room.of(hotelRoom);
-        this.arrivalDate = arrivalDate;
-        this.departureDate = departureDate;
+                       @JsonProperty("arrival_date") LocalDate arrival_date,
+                       @JsonProperty("departure_date") LocalDate departure_date) {
+        this.reservation_id = id;
+        this.hotel_room = Room.of(hotel_room);
+        this.arrival_date = arrival_date;
+        this.departure_date = departure_date;
         this.guest = Guest.of(first_name, last_name);
-        this.hotelChain = hotel_chain;
+        this.hotel_chain = hotel_chain;
     }
 
-    public UUID getReservationId() {
-        return reservationId;
+    public UUID getReservation_id() {
+        return reservation_id;
     }
 
-    public Room getHotelRoom() {
-        return hotelRoom;
+    public Room getHotel_room() {
+        return hotel_room;
     }
 
-    public LocalDate getArrivalDate() {
-        return arrivalDate;
+    public LocalDate getArrival_date() {
+        return arrival_date;
     }
 
-    public LocalDate getDepartureDate() {
-        return departureDate;
+    public LocalDate getDeparture_date() {
+        return departure_date;
     }
 
     public Guest getGuest() {
         return guest;
     }
 
-    public HotelChain getHotelChain() {
-        return hotelChain;
+    public HotelChain getHotel_chain() {
+        return hotel_chain;
     }
 
 
@@ -59,32 +59,32 @@ public class Reservation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reservation that = (Reservation) o;
-        return Objects.equals(reservationId, that.reservationId) &&
-                Objects.equals(hotelRoom, that.hotelRoom) &&
-                Objects.equals(arrivalDate, that.arrivalDate) &&
-                Objects.equals(departureDate, that.departureDate) &&
+        return Objects.equals(reservation_id, that.reservation_id) &&
+                Objects.equals(hotel_room, that.hotel_room) &&
+                Objects.equals(arrival_date, that.arrival_date) &&
+                Objects.equals(departure_date, that.departure_date) &&
                 Objects.equals(guest, that.guest) &&
-                hotelChain == that.hotelChain;
+                hotel_chain == that.hotel_chain;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(reservationId, hotelRoom, arrivalDate, departureDate, guest, hotelChain);
+        return Objects.hash(reservation_id, hotel_room, arrival_date, departure_date, guest, hotel_chain);
     }
 
     @Override
     public String toString() {
         return "Reservation{" +
-                "reservationId=" + reservationId +
-                ", room=" + hotelRoom +
-                ", arrivalDate=" + arrivalDate +
-                ", departureDate=" + departureDate +
+                "reservationId=" + reservation_id +
+                ", room=" + hotel_room +
+                ", arrivalDate=" + arrival_date +
+                ", departureDate=" + departure_date +
                 ", guest=" + guest +
-                ", hotelChain=" + hotelChain +
+                ", hotelChain=" + hotel_chain +
                 '}';
     }
 
     public String getDate() {
-        return getArrivalDate() + " and " + getDepartureDate();
+        return getArrival_date() + " and " + getDeparture_date();
     }
 }

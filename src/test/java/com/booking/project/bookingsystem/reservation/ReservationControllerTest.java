@@ -83,7 +83,7 @@ class ReservationControllerTest {
 
     /* Mockito.when(reservationService.getAllReservations()).thenReturn(reservationList);
         String URI = "api/reservations/allReservations";
-        String data = new String (Files.readAllBytes(Paths.get("src/test/java/resources/ testReservationTableWithOnePerson.json")));
+        String data = new String (Files.readAllBytes(Paths.get("src/test/java/resources/testDataWithOnePerson.json")));
         System.out.println(data);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get(URI)
                 .accept(MediaType.APPLICATION_JSON)

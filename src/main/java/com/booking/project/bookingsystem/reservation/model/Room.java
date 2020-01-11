@@ -1,5 +1,8 @@
 package com.booking.project.bookingsystem.reservation.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.util.Objects;
 
 import static org.apache.commons.lang3.Validate.isTrue;
