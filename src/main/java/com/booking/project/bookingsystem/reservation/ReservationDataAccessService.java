@@ -157,13 +157,12 @@ public class ReservationDataAccessService {
         jdbcTemplate.update(sql, reservation_id);
     }
 
-
     public int updateHotelChain(UUID reservation_id, HotelChain hotel_chain) {
         String sql = "" +
                 " UPDATE reservation " +
                 " SET hotel_chain = ?" +
                 " WHERE reservation_id = ?";
-        return jdbcTemplate.update(sql, hotel_chain, reservation_id);
+        return jdbcTemplate.update(sql, hotel_chain.toString(), reservation_id);
     }
 
     public int updateHotelRoom(UUID reservation_id, Integer room_number) {

@@ -1,10 +1,10 @@
 [
   {
     "reservation_id": "9abacbae-348d-11ea-aec2-2e728ce88125",
-    "hotel_chain": "Quality_Hotel",
-    "hotel_room": "101",
-    "first_name": "abdullahi",
-    "last_name": "hassan",
+    "hotel_chain": "Comfort_Hotel",
+    "hotel_room": "103",
+    "first_name": "Adam",
+    "last_name": "Svenson",
     "arrival_date": "2022-01-01",
     "departure_date": "2022-01-03"
   }

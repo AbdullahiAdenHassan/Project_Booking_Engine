@@ -15,7 +15,7 @@ public class Room {
         this.room = room;
     }
 
-    public static Room of (int room){
+    public static Room of (final int room){
         return new Room(room);
     }
 

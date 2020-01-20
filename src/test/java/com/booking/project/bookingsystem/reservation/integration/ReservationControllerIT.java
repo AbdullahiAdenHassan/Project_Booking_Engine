@@ -5,6 +5,7 @@ import com.booking.project.bookingsystem.reservation.model.Reservation;
 import com.booking.project.bookingsystem.utils.Handler;
 import org.json.simple.JSONArray;
 import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +15,12 @@ import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
-import java.util.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,6 +33,7 @@ public class ReservationControllerIT {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
+
     private HttpHeaders headers;
     private String URI;
     private HttpEntity<Object> requestEntity;
@@ -38,17 +45,52 @@ public class ReservationControllerIT {
 
 
     @Test
-    public void test_Adding_One_Reservation_File() throws IOException {
+    public void test_update_One_Reservation_Into_DataBase() {
+        System.out.println("--------------------------------------------------------------------------");
+        System.out.println("Running test: " + new Throwable().getStackTrace()[0].getMethodName() + "\n");
+
+        givenThatReservationTableIsEmpty();
+        givenThatJsonFileContentsOneReservations();
+        givenThatUserIsLoggedInToWebSite();
+        givenThatContentTypeIsApplicationJson();
+        whenReservationFileIsSent();
+        whenReservationUpdateURIAddressIsGiven();
+        whenReservationUpdateJsonFileIsGiven();
+        whenReservationHasBeenUpdatedById();
+        whenReservationDataIsReceived();
+        thenVerifyThatDataBaseHasBeenUpdated();
+
+        System.out.println("--------------------------------------------------------------------------");
+    }
+
+    @Test
+    public void test_Adding_two_Reservations_Into_DataBase() {
         System.out.println("--------------------------------------------------------------------------");
         System.out.println("Running test: " + new Throwable().getStackTrace()[0].getMethodName() + "\n");
 
         givenThatReservationTableIsEmpty();
         givenThatUserIsLoggedInToWebSite();
-        givenThatAJsonFileIsReadable();
+        givenThatJsonFileContentsTwoReservations();
         givenThatContentTypeIsApplicationJson();
         whenReservationFileIsSent();
         whenReservationDataIsReceived();
-        thenJsonFileShouldEqualDataBaseInfo();
+        thenVerifyThatTwoReservationsExistInDataBase();
+
+        System.out.println("--------------------------------------------------------------------------");
+    }
+
+    @Test
+    public void test_Adding_One_Reservation_Into_DataBase() {
+        System.out.println("--------------------------------------------------------------------------");
+        System.out.println("Running test: " + new Throwable().getStackTrace()[0].getMethodName() + "\n");
+
+        givenThatReservationTableIsEmpty();
+        givenThatUserIsLoggedInToWebSite();
+        givenThatJsonFileContentsOneReservations();
+        givenThatContentTypeIsApplicationJson();
+        whenReservationFileIsSent();
+        whenReservationDataIsReceived();
+        thenVerifyThatJsonFileIsEqualToDataBaseInfo();
 
         System.out.println("--------------------------------------------------------------------------");
     }
@@ -60,7 +102,7 @@ public class ReservationControllerIT {
 
         givenThatReservationTableIsEmpty();
         givenThatBookingEngineHasAPostMethodAndConsumesMediaTypeJson();
-        whenTheApplicationPostAReservtionIntoDataBase();
+        whenTheApplicationPostAReservationIntoDataBase();
         thenVerifyThatPostStatusIs200();
 
         System.out.println("--------------------------------------------------------------------------");
@@ -78,19 +120,59 @@ public class ReservationControllerIT {
         System.out.println("--------------------------------------------------------------------------");
     }
 
-
     private void givenThatUserIsLoggedInToWebSite() {
         URI = "/addReservation";
     }
 
-    private void givenThatAJsonFileIsReadable() {
-        String jsonPath = "src/test/resources/testDataOne.json"; // One reservation
+    private void givenThatJsonFileContentsTwoReservations() {
+        String jsonPath = "src/test/resources/testDataTwoReservations"; // Two reservation
+        jsonFile = Handler.jacksonReadingJsonFiles(jsonPath);
+    }
+
+    private void givenThatJsonFileContentsOneReservations() {
+        String jsonPath = "src/test/resources/testDataOneReservation"; // One reservation
         jsonFile = Handler.jacksonReadingJsonFiles(jsonPath);
     }
 
     private void givenThatContentTypeIsApplicationJson() {
         headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+    }
+
+    private void givenThatReservationTableIsEmpty() {
+        testRestTemplate.delete(Handler.formFullURLWithPort(port, "/deleteAll"));
+    }
+
+    private void givenThatBookingEngineHasAPostMethodAndConsumesMediaTypeJson() {
+        headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        URI = "/addReservation";
+    }
+
+    private void whenReservationUpdateURIAddressIsGiven() {
+        URI = "/updateReservation/9abacbae-348d-11ea-aec2-2e728ce88125";
+    }
+
+    private void whenReservationUpdateJsonFileIsGiven() {
+        String jsonPath = "src/test/resources/testDataForUpdatingOneEntireReservation";
+        jsonFile = Handler.jacksonReadingJsonFiles(jsonPath);
+    }
+
+    private void whenReservationHasBeenUpdatedById() {
+        inputData = new ArrayList<>();
+        for (Object reservation : jsonFile) {
+            HttpEntity<Object> requestEntity = new HttpEntity<>(reservation, headers);
+
+            ResponseEntity<Reservation> updateResponseEntity = testRestTemplate.exchange(
+                    Handler.formFullURLWithPort(port, URI),
+                    HttpMethod.PUT,
+                    requestEntity,
+                    Reservation.class);
+
+            assertThat(updateResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+            inputData.add(Handler.convertDataToReservationObject(reservation));
+        }
     }
 
     private void whenReservationFileIsSent() {
@@ -126,29 +208,8 @@ public class ReservationControllerIT {
         }
     }
 
-    private void thenJsonFileShouldEqualDataBaseInfo() {
-
-        System.out.println("\n\n");
-        System.out.println(inputData);
-        System.out.println(responseData);
-        assertThat(inputData.size()).isEqualTo(responseData.size());
-        assertThat(inputData.get(0).getReservation_id()).isEqualTo(responseData.get(0).getReservation_id());
-
-    }
-
-
-    private void givenThatReservationTableIsEmpty() {
-        testRestTemplate.delete(Handler.formFullURLWithPort(port, "/deleteAll"));
-    }
-
-    private void givenThatBookingEngineHasAPostMethodAndConsumesMediaTypeJson() {
-        headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        URI = "/addReservation";
-    }
-
-    private void whenTheApplicationPostAReservtionIntoDataBase() {
-        String jsonPath = "src/test/resources/testDataOne.json";
+    private void whenTheApplicationPostAReservationIntoDataBase() {
+        String jsonPath = "src/test/resources/testDataOneReservation";
         JSONArray reservationList = Handler.jacksonReadingJsonFiles(jsonPath);
         requestEntity = new HttpEntity<>(reservationList.get(0), headers);
         ResponseEntity<String> postResponseEntity = testRestTemplate.exchange(
@@ -157,17 +218,6 @@ public class ReservationControllerIT {
                 requestEntity,
                 String.class);
         statusForPost = postResponseEntity.getStatusCode();
-        System.out.println(statusForPost);
-    }
-
-    private void thenVerifyThatPostStatusIs200() {
-        assertThat(HttpStatus.OK).isEqualTo(statusForPost);
-    }
-
-    private void givenThatBookingEngineHasAGetMethodAndConsumesMediaTypeJson() {
-        headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        URI = "/getAllReservation";
     }
 
     private void whenTheApplicationGetsAllReservationsFromTheDataBase() {
@@ -181,87 +231,47 @@ public class ReservationControllerIT {
         statusForGet = getResponseEntity.getStatusCode();
     }
 
+    private void thenVerifyThatDataBaseHasBeenUpdated() {
+        assertThat("Adam").isEqualTo(responseData.get(0).getGuest().getFirst_name());
+        assertThat("Svenson").isEqualTo(responseData.get(0).getGuest().getLast_name());
+        assertThat(103).isEqualTo(responseData.get(0).getHotel_room().getRoom());
+    }
+
+    private void thenVerifyThatTwoReservationsExistInDataBase() {
+        assertThat(2).isEqualTo(responseData.size());
+        assertThat(inputData.size()).isEqualTo(responseData.size());
+        assertThat(inputData.get(0).getReservation_id()).isEqualTo(responseData.get(0).getReservation_id());
+        assertThat(inputData.get(1).getReservation_id()).isEqualTo(responseData.get(1).getReservation_id());
+    }
+
+    private void thenVerifyThatJsonFileIsEqualToDataBaseInfo() {
+        assertThat(inputData.size()).isEqualTo(responseData.size());
+        assertThat(inputData.get(0).getReservation_id()).isEqualTo(responseData.get(0).getReservation_id());
+    }
+
+    private void thenVerifyThatPostStatusIs200() {
+        assertThat(HttpStatus.OK).isEqualTo(statusForPost);
+    }
+
+    private void givenThatBookingEngineHasAGetMethodAndConsumesMediaTypeJson() {
+        headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        URI = "/getAllReservation";
+    }
+
     private void thenVerifyThatGetStatusIs200() {
         assertThat(HttpStatus.OK).isEqualTo(statusForGet);
     }
 
-    /*Old!*/
-    @Test
-    public void testPostingApiCall() {
-        System.out.println("---------Delete all data---------------------");
-        String deleteAllURI = "/deleteAll";
-        String postAtURI = "/addReservation";
-        String getFromURI = "/getAllReservation";
-        testRestTemplate.delete(Handler.formFullURLWithPort(port, deleteAllURI));
+    /*------old test------*/
 
-        System.out.println("--------------------Post--------------------");
-        String jsonPath = "src/test/resources/testDataOne.json";
-
-        JSONArray reservation1 = Handler.jacksonReadingJsonFiles(jsonPath);
-        System.out.println(reservation1);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<Object> requestEntity = new HttpEntity<>(reservation1.get(0), headers);
-
-        ResponseEntity<String> postResponseEntity = testRestTemplate.exchange(Handler.formFullURLWithPort(port, postAtURI),
-                HttpMethod.POST,
-                requestEntity,
-                String.class);
-
-        HttpStatus statusForPost = postResponseEntity.getStatusCode();
-        System.out.println("status code - " + statusForPost);
-        HttpHeaders responseHeaders = postResponseEntity.getHeaders();
-        System.out.println("response header = " + responseHeaders);
-        assertThat(HttpStatus.OK).isEqualTo(statusForPost);
-
-        System.out.println("--------------------Get--------------------");
-
-        ResponseEntity<String> getResponseEntity = testRestTemplate.exchange(Handler.formFullURLWithPort(port, getFromURI),
-                HttpMethod.GET,
-                requestEntity,
-                String.class);
-
-        HttpStatus statusForGet = getResponseEntity.getStatusCode();
-        String user = getResponseEntity.getBody();
-        System.out.println("request body = " + user);
-        HttpHeaders postResponseHeaders = getResponseEntity.getHeaders();
-        System.out.println("response header = " + responseHeaders);
-        assertThat(HttpStatus.OK).isEqualTo(statusForGet);
-    }
-
-    @Test
-    public void testGetApiCall() {
-
-        String getFromURI = "/getAllReservation";
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<Reservation> requestEntity = new HttpEntity<>(headers);
-        ResponseEntity<String> responseEntity = testRestTemplate.exchange(Handler.formFullURLWithPort(port, getFromURI),
-                HttpMethod.GET,
-                requestEntity,
-                String.class);
-
-        HttpStatus status = responseEntity.getStatusCode();
-        System.out.println("status code - " + status);
-
-        String user = responseEntity.getBody();
-        System.out.println("request body = " + user);
-        HttpHeaders responseHeaders = responseEntity.getHeaders();
-        System.out.println("response header = " + responseHeaders);
-        assertThat(HttpStatus.OK).isEqualTo(status);
-    }
-
-
-    @Test
-    public void test() {
+    @Disabled
+    public void testingGetAndPost() {
 
         String deleteAllURI = "/deleteAll";
         String postAtURI = "/addReservation";
         String getFromURI = "/getAllReservation";
-        String jsonPath = "src/test/resources/testDataTwo";
+        String jsonPath = "src/test/resources/testDataTwoReservations";
         JSONArray reservations = Handler.jacksonReadingJsonFiles(jsonPath);
 
         testRestTemplate.delete(Handler.formFullURLWithPort(port, deleteAllURI));
@@ -297,5 +307,35 @@ public class ReservationControllerIT {
         assertThat(inputData.size()).isEqualTo(responseData.size());
         assertThat(inputData.get(0).getReservation_id()).isEqualTo(responseData.get(0).getReservation_id());
         assertThat(inputData.get(1).getReservation_id()).isEqualTo(responseData.get(1).getReservation_id());
+    }
+
+    @Disabled
+    public void testStream() {
+        String jsonPath = "src/test/resources/testDataTwoReservations";
+        JSONArray reservations = Handler.jacksonReadingJsonFiles(jsonPath);
+        System.out.println(reservations);
+
+        String testData = "[{\"reservation_id\":\"9abacbae-348d-11ea-aec2-2e728ce88125\",\"hotel_chain\":\"Quality_Hotel\"}]";
+        /*TODO
+         *  1) read every line and get out value of example reservation_id
+         *
+         * */
+
+        try {
+            String data = new String(Files.readAllBytes(Path.of(jsonPath)));
+            System.out.println(data);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (Stream<String> stream = Files.lines(Path.of(jsonPath))) {
+            stream.filter(s -> s.endsWith("\","))
+                    .map(String::toUpperCase)
+                    .map(reservation -> reservation.startsWith("R"))
+                    .forEach(System.out::println);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
